@@ -36,6 +36,6 @@ const getListPoint = () => {
                 </button>
               </div>
             </li>`;
-};  
+};
 
 export {getListPoint};

@@ -17,6 +17,6 @@ const getMenuFilters = () => {
 
               <button class="visually-hidden" type="submit">Accept filter</button>
             </form>`;
-};  
+};
 
 export {getMenuFilters};

@@ -25,6 +25,6 @@ const getFormSort = () => {
               <label class="trip-sort__btn" for="sort-offer">Offers</label>
             </div>
           </form>`;
-};  
+};
 
 export {getFormSort};
