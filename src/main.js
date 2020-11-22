@@ -16,27 +16,27 @@ const render = (element, model, place) => {
 };
 
 // HEADER
-const tripContainer = document.querySelector(`.trip-main`);
-render(tripContainer, getHeaderInfoTemplate(), `afterbegin`);
-const tripHeaderContainer = document.querySelector(`.trip-info`);
-render(tripHeaderContainer, getInfoDestination(), `afterbegin`);
-render(tripHeaderContainer, getInfoPrice(), `beforeend`);
+const mainContainer = document.querySelector(`.trip-main`);
+render(mainContainer, getHeaderInfoTemplate(), `afterbegin`);
+const headerContainer = document.querySelector(`.trip-info`);
+render(headerContainer, getInfoDestination(), `afterbegin`);
+render(headerContainer, getInfoPrice(), `beforeend`);
 
 //MENU
-render(tripContainer, getMenuControls(), `beforeend`);
-const tripMenuContainer = document.querySelector(`.trip-controls`);
-render(tripMenuContainer, getMenuTabs(), `afterbegin`);
-render(tripMenuContainer, getMenuFilters(), `beforeend`);
+render(mainContainer, getMenuControls(), `beforeend`);
+const menuContainer = document.querySelector(`.trip-controls`);
+render(menuContainer, getMenuTabs(), `afterbegin`);
+render(menuContainer, getMenuFilters(), `beforeend`);
 
 //MAIN (forms)
-const tripEventsContainer = document.querySelector(`.trip-events`);
-render(tripEventsContainer, getFormSort(), `afterbegin`);
-render(tripEventsContainer, getList(), `beforeend`);
-const tripEventsEditContainer = document.querySelector('.trip-events__list');
-render(tripEventsEditContainer, getFormEdit(), `beforeend`);
+const eventsContainer = document.querySelector(`.trip-events`); 
+render(eventsContainer, getFormSort(), `afterbegin`); 
+render(eventsContainer, getList(), `beforeend`); 
+const eventsList = document.querySelector('.trip-events__list');
+render(eventsList, getFormEdit(), `beforeend`);
 
 //MAIN (points-list)
 for (let i = 0; i < LIST_COUNT; i++) {
-  render(tripEventsContainer, getListPoint(), `beforeend`);
+  render(eventsList, getListPoint(), `beforeend`); 
 };
 
