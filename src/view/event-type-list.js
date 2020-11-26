@@ -1,9 +1,7 @@
 import {TYPES} from "../const.js";
 
-const getEventTypeList = (point) => {
-  
-  const{type} = point;
-  
+const getEventTypeList = (point) => {  
+  const{type} = point;  
   const getTypeItem = (types) => {    
       return types.map ((typeItem) => {  
         const typeInLowerCase = typeItem.toLowerCase();      
@@ -14,8 +12,7 @@ const getEventTypeList = (point) => {
           </label>
           </div>`
       }).join(``);
-  }; 
-  
+  };   
   return `
       <div class="event__type-list">
         <fieldset class="event__type-group">

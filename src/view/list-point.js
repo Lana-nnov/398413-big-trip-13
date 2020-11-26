@@ -1,9 +1,6 @@
-const getListPoint = (point) => {
-  
-  const{place, type, isFavorite} = point;
-  
-  const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ` `;  
-  
+const getListPoint = (point) => {  
+  const {place, type, isFavorite} = point;  
+  const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ` `;    
   return `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
