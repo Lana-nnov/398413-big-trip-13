@@ -1,11 +1,11 @@
-const getFormEdit = (point) => {  
-  const {description, place, type, photos} = point;     
+const getFormEdit = (point) => {
+  const {description, place, type, photos} = point;
   const createPhotoList = () => {
-      return photos.map((elem) => {
-        return `<img class="event__photo" src="${elem}" alt="Event photo">`
-      }).join(``); 
-  };    
-  const photosList = createPhotoList();     
+    return photos.map((elem) => {
+      return `<img class="event__photo" src="${elem}" alt="Event photo">`;
+      }).join(``);
+  };
+  const photosList = createPhotoList();
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
