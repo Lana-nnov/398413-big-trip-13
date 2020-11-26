@@ -7,9 +7,13 @@ import {getMenuFilters} from "./view/menu-filters";
 import {getFormSort} from "./view/form-sort";
 import {getList} from "./view/list-all";
 import {getFormEdit} from "./view/form-edit";
+import {getEventTypeList} from "./view/event-type-list";
 import {getListPoint} from "./view/list-point";
+import {generatePoint} from "./mock/task.js";
+import {LIST_COUNT} from "./const.js";
+import {THIRD_POINT} from "./const.js";
 
-const LIST_COUNT = 3;
+const points = new Array(LIST_COUNT).fill().map(generatePoint);
 
 const render = (element, model, place) => { 
     element.insertAdjacentHTML(place, model);  
@@ -19,7 +23,7 @@ const render = (element, model, place) => {
 const mainContainer = document.querySelector(`.trip-main`);
 render(mainContainer, getHeaderInfoTemplate(), `afterbegin`);
 const headerContainer = document.querySelector(`.trip-info`);
-render(headerContainer, getInfoDestination(), `afterbegin`);
+render(headerContainer, getInfoDestination(points), `afterbegin`);
 render(headerContainer, getInfoPrice(), `beforeend`);
 
 //MENU
@@ -33,10 +37,11 @@ const eventsContainer = document.querySelector(`.trip-events`);
 render(eventsContainer, getFormSort(), `afterbegin`); 
 render(eventsContainer, getList(), `beforeend`); 
 const eventsList = document.querySelector('.trip-events__list');
-render(eventsList, getFormEdit(), `beforeend`);
+render(eventsList, getFormEdit(points[THIRD_POINT]), `beforeend`);
+const eventTypeWrapper = document.querySelector('.event__type-wrapper');
+render(eventTypeWrapper, getEventTypeList(points[THIRD_POINT]), `beforeend`);
 
 //MAIN (points-list)
 for (let i = 0; i < LIST_COUNT; i++) {
-  render(eventsList, getListPoint(), `beforeend`); 
+  render(eventsList, getListPoint(points[i]), `beforeend`); 
 };
-
