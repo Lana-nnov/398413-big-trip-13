@@ -3,7 +3,7 @@ const getFormEdit = (point) => {
   const createPhotoList = () => {
     return photos.map((elem) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
-      }).join(``);
+    }).join(``);
   };
   const photosList = createPhotoList();
   return `<li class="trip-events__item">
