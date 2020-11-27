@@ -4,6 +4,7 @@ import {DESCRIPTIONS} from "../const.js";
 import {FHOTOS_COUNT} from "../const.js";
 import {getRandomInteger} from "../utils.js";
 import {shuffleArray} from "../utils.js";
+import dayjs from "dayjs";
 
 const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
@@ -13,6 +14,23 @@ const generateDescription = () => {
   }
   return shuffleArray(descriptionBlock).join(` `);
 };
+
+const generateDateStart = () => {
+  const maxDaysGap = 30;
+  const minHoursGap = 1;
+  const maxHoursGap = 4;
+  const daysGap = getRandomInteger(0, maxDaysGap);
+  const hoursGap = getRandomInteger(minHoursGap, maxHoursGap);
+  return dayjs().add(daysGap, `day`).add(hoursGap, `hour`).toDate();
+};  
+
+const generateDateFinish = (firstDate) => {
+  const maxHoursGap = 24;
+  const maxMinutesGap = 60;
+  const hoursGap = getRandomInteger(0, maxHoursGap);
+  const minutesGap = getRandomInteger(0, maxMinutesGap);
+  return dayjs(firstDate).add(hoursGap, `hour`). add(minutesGap, `minute`).toDate();
+}; 
 
 const getRandomPlace = () => {
   const randomIndex = getRandomInteger(0, PLACES.length - 1);
@@ -35,8 +53,11 @@ const showPhotos = () => {
 // const isFavorite = Boolean(getRandomInteger(0, 1));
 
 const generatePoint = () => {
+  const dateStart = generateDateStart();
   return {
     place: getRandomPlace(),
+    dateStart,
+    dateFinish: generateDateFinish(dateStart),
     description: generateDescription(),
     photos: showPhotos(),
     type: getRandomType(),
