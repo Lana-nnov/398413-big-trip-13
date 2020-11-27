@@ -22,7 +22,7 @@ const generateDateStart = () => {
   const daysGap = getRandomInteger(0, maxDaysGap);
   const hoursGap = getRandomInteger(minHoursGap, maxHoursGap);
   return dayjs().add(daysGap, `day`).add(hoursGap, `hour`).toDate();
-};  
+};
 
 const generateDateFinish = (firstDate) => {
   const maxHoursGap = 24;
@@ -30,7 +30,7 @@ const generateDateFinish = (firstDate) => {
   const hoursGap = getRandomInteger(0, maxHoursGap);
   const minutesGap = getRandomInteger(0, maxMinutesGap);
   return dayjs(firstDate).add(hoursGap, `hour`). add(minutesGap, `minute`).toDate();
-}; 
+};
 
 const getRandomPlace = () => {
   const randomIndex = getRandomInteger(0, PLACES.length - 1);

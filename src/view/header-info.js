@@ -2,9 +2,9 @@ import dayjs from "dayjs";
 import {THIRD_POINT} from "../const.js";
 
 const getInfoDestination = (points) => {
-  const places = points.map(({place}) => place);  
+  const places = points.map(({place}) => place);
   const dateFirst = dayjs(points[0].dateStart).format(`MMM DD`);
-  const dateSecond = dayjs(points[THIRD_POINT].dateFinish).format(`DD`);
+  const dateSecond = dayjs(points[THIRD_POINT].dateFinish).format(`MMM DD`);
 
   const MAIN_COUNT_POINTS = 3;
 
