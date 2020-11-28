@@ -42,7 +42,7 @@ const getRandomType = () => {
   return TYPES[randomIndex];
 };
 
-const showPhotos = () => {
+const getPhotosBlock = () => {
   const photosBlock = new Array(FHOTOS_COUNT).fill().map(() => {
     return `http://picsum.photos/248/152?r=${Math.random()}`;
   });
@@ -59,7 +59,7 @@ const generatePoint = () => {
     dateStart,
     dateFinish: generateDateFinish(dateStart),
     description: generateDescription(),
-    photos: showPhotos(),
+    photos: getPhotosBlock(),
     type: getRandomType(),
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
