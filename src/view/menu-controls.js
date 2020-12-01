@@ -24,6 +24,6 @@ class MenuControls {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {MenuControls};

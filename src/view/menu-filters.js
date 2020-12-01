@@ -41,6 +41,6 @@ class MenuFilters {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {MenuFilters};

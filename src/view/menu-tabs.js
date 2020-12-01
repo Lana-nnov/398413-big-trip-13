@@ -27,6 +27,6 @@ class MenuTabs {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {MenuTabs};

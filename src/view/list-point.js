@@ -64,11 +64,11 @@ class ListPoint {
     this._point = point;
   }
 
-  getTemplate(point) {
+  getTemplate() {
     return getListPoint(this._point);
   }
 
-  getElement() {    
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
@@ -79,6 +79,6 @@ class ListPoint {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {ListPoint};

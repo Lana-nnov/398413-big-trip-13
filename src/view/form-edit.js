@@ -154,7 +154,7 @@ class FormEdit {
 
   removeElement() {
     this._element = null;
-  };
-};
+  }
+}
 
 export {FormEdit};
