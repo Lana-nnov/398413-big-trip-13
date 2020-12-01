@@ -7,13 +7,13 @@ const getFormEdit = (point) => {
   const createPhotoList = () => {
     return photos.map((elem) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
-    }).join(``);   
-  };  
-  
+    }).join(``);
+  };
+
   const dateFirst = dayjs(dateStart).format(`DD/MM/YY-hh:mm`);
   const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-hh:mm`);
   const photosList = createPhotoList();
-  
+
   const getEventTypeList = () => {
     const getTypeItem = (types) => {
       return types.map((typeItem) => {
@@ -34,7 +34,7 @@ const getFormEdit = (point) => {
           </fieldset>
       </div>`;
   };
-  
+
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -140,7 +140,7 @@ class FormEdit {
     this._point = point;
   }
 
-  getTemplate(point) {
+  getTemplate() {
     return getFormEdit(this._point);
   }
 
@@ -154,7 +154,7 @@ class FormEdit {
 
   removeElement() {
     this._element = null;
-  }
+  };
 };
 
 export {FormEdit};

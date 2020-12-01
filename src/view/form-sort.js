@@ -49,6 +49,6 @@ class FormSort {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {FormSort};

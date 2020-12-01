@@ -24,6 +24,6 @@ class List {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {List};

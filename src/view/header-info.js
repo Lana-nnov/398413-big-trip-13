@@ -29,7 +29,7 @@ class InfoDestination {
     this._points = points;
   }
 
-  getTemplate(points) {
+  getTemplate() {
     return getInfoDestination(this._points);
   }
 
@@ -44,6 +44,6 @@ class InfoDestination {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {InfoDestination};

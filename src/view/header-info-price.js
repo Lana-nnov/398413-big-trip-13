@@ -26,6 +26,6 @@ class InfoPrice {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {InfoPrice};

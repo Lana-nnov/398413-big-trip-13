@@ -24,6 +24,6 @@ class HeaderInfoTemplate {
   removeElement() {
     this._element = null;
   }
-};
+}
 
 export {HeaderInfoTemplate};
