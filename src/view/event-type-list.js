@@ -1,4 +1,5 @@
 import {TYPES} from "../const.js";
+import {createElement} from "../utils.js";
 
 const getEventTypeList = (point) => {
   const {type} = point;
@@ -22,4 +23,27 @@ const getEventTypeList = (point) => {
     </div>`;
 };
 
-export {getEventTypeList};
+class EventTypeList {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate(point) {
+    return getEventTypeList(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+};
+
+export {EventTypeList};

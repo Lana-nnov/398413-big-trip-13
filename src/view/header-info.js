@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {createElement} from "../utils.js";
 import {THIRD_POINT} from "../const.js";
 
 const getInfoDestination = (points) => {
@@ -22,4 +23,27 @@ const getInfoDestination = (points) => {
             </div>`;
 };
 
-export {getInfoDestination};
+class InfoDestination {
+  constructor(points) {
+    this._element = null;
+    this._points = points;
+  }
+
+  getTemplate(points) {
+    return getInfoDestination(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+};
+
+export {InfoDestination};
