@@ -7,7 +7,6 @@ import {MenuFilters} from "./view/menu-filters";
 import {FormSort} from "./view/form-sort";
 import {List} from "./view/list-all";
 import {FormEdit} from "./view/form-edit";
-import {EventTypeList} from "./view/event-type-list";
 import {ListPoint} from "./view/list-point";
 import {generatePoint} from "./mock/task.js";
 import {LIST_COUNT} from "./const.js";
@@ -20,8 +19,13 @@ const renderPoint = (pointListElement, point) => {
   const pointComponent = new ListPoint(point);
   const pointEditComponent = new FormEdit(point);
   
-  const replacePointToForm = () => {
+  const addEventTypeList = (point) => {
+    const eventTypeWrapper = pointEditComponent.getElement().querySelector('.event__type-wrapper');
+  } 
+  
+  const replacePointToForm = (point) => {
     pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    addEventTypeList(point);    
   };    
   
   const replaceFormToPoint = () => {
@@ -37,7 +41,7 @@ const renderPoint = (pointListElement, point) => {
   .addEventListener(`submit`, (evt) => {
     evt.preventDefault();
     replaceFormToPoint();
-  });  
+  });
   
   render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };

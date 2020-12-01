@@ -1,16 +1,40 @@
 import dayjs from "dayjs";
 import {createElement} from "../utils.js";
+import {TYPES} from "../const.js";
 
 const getFormEdit = (point) => {
   const {description, place, type, dateStart, dateFinish, photos} = point;
   const createPhotoList = () => {
     return photos.map((elem) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
-    }).join(``);
-  };
+    }).join(``);   
+  };  
+  
   const dateFirst = dayjs(dateStart).format(`DD/MM/YY-hh:mm`);
   const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-hh:mm`);
   const photosList = createPhotoList();
+  
+  const getEventTypeList = () => {
+    const getTypeItem = (types) => {
+      return types.map((typeItem) => {
+        const typeInLowerCase = typeItem.toLowerCase();
+        return `<div class="event__type-item">
+            <input id="event-type-${typeInLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeInLowerCase}"
+            ${type === typeItem ? `checked` : ` `}>
+            <label class="event__type-label  event__type-label--${typeInLowerCase}" for="event-type-${typeInLowerCase}-1">${typeInLowerCase}
+            </label>
+            </div>`;
+      }).join(``);
+    };
+    return `
+        <div class="event__type-list">
+          <fieldset class="event__type-group">
+            <legend class="visually-hidden">Event type</legend>
+            ${getTypeItem(TYPES)}
+          </fieldset>
+      </div>`;
+  };
+  
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -20,6 +44,7 @@ const getFormEdit = (point) => {
                       <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                    ${getEventTypeList()}
                   </div>
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
@@ -115,7 +140,7 @@ class FormEdit {
     this._point = point;
   }
 
-  getTemplate(points) {
+  getTemplate(point) {
     return getFormEdit(this._point);
   }
 

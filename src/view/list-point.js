@@ -68,7 +68,7 @@ class ListPoint {
     return getListPoint(this._point);
   }
 
-  getElement() {
+  getElement() {    
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
