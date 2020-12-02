@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const getMenuFilters = () => {
   return `<form class="trip-filters" action="#" method="get">
               <div class="trip-filters__filter">
@@ -19,4 +21,26 @@ const getMenuFilters = () => {
             </form>`;
 };
 
-export {getMenuFilters};
+class MenuFilters {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getMenuFilters();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export {MenuFilters};

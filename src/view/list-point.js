@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {createElement} from "../utils.js";
 
 const getListPoint = (point) => {
   const {place, type, dateStart, dateFinish, isFavorite} = point;
@@ -57,4 +58,27 @@ const getListPoint = (point) => {
             </li>`;
 };
 
-export {getListPoint};
+class ListPoint {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return getListPoint(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export {ListPoint};
