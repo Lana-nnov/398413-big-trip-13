@@ -2,8 +2,8 @@ import {TYPES} from "../const.js";
 import {PLACES} from "../const.js";
 import {DESCRIPTIONS} from "../const.js";
 import {FHOTOS_COUNT} from "../const.js";
-import {getRandomInteger} from "../utils.js";
-import {shuffleArray} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
+import {shuffleArray} from "../utils/common.js";
 import dayjs from "dayjs";
 
 const generateDescription = () => {
