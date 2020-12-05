@@ -32,7 +32,7 @@ class InfoDestination extends AbstractView {
 
   getTemplate() {
     return getInfoDestination(this._points);
-  }  
+  }
 }
 
 export {InfoDestination};

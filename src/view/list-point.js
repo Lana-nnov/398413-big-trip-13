@@ -69,11 +69,11 @@ class ListPoint extends AbstractView {
   getTemplate() {
     return getListPoint(this._point);
   }
-  
+
   _clickHandler() {
     this._callback.click();
-  }  
-  
+  }
+
   setEditClickHandler(callback) {
     this._callback.click = callback;
     this.getElement().addEventListener(`click`, this._clickHandler);

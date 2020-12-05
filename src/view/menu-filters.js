@@ -21,10 +21,10 @@ const getMenuFilters = () => {
             </form>`;
 };
 
-class MenuFilters extends AbstractView {  
+class MenuFilters extends AbstractView {
   getTemplate() {
     return getMenuFilters();
-  }  
+  }
 }
 
 export {MenuFilters};

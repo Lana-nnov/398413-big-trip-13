@@ -145,12 +145,12 @@ class FormEdit extends AbstractView {
   getTemplate() {
     return getFormEdit(this._point);
   }
-  
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
-  }  
-  
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.click = callback;
     this.getElement().addEventListener(`click`, this._clickHandler);

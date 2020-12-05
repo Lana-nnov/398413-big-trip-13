@@ -9,7 +9,7 @@ const getInfoPrice = () => {
 class InfoPrice extends AbstractView {
   getTemplate() {
     return getInfoPrice();
-  } 
+  }
 }
 
 export {InfoPrice};

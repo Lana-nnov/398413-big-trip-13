@@ -29,10 +29,10 @@ const getFormSort = () => {
           </form>`;
 };
 
-class FormSort extends AbstractView {  
+class FormSort extends AbstractView {
   getTemplate() {
     return getFormSort();
-  } 
+  }
 }
 
 export {FormSort};

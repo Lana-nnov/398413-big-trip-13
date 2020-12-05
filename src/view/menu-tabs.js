@@ -7,7 +7,7 @@ const getMenuTabs = () => {
             </nav>`;
 };
 
-class MenuTabs extends AbstractView {   
+class MenuTabs extends AbstractView {
   getTemplate() {
     return getMenuTabs();
   }
