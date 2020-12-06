@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {TYPES} from "../const.js";
 
 const getFormEdit = (point) => {
@@ -134,26 +134,26 @@ const getFormEdit = (point) => {
             </li>`;
 };
 
-class FormEdit {
+class FormEdit extends AbstractView {
   constructor(point) {
+    super();
     this._element = null;
     this._point = point;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return getFormEdit(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }
 

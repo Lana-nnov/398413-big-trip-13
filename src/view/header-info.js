@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {THIRD_POINT} from "../const.js";
 
 const getInfoDestination = (points) => {
@@ -23,26 +23,15 @@ const getInfoDestination = (points) => {
             </div>`;
 };
 
-class InfoDestination {
+class InfoDestination extends AbstractView {
   constructor(points) {
+    super();
     this._element = null;
     this._points = points;
   }
 
   getTemplate() {
     return getInfoDestination(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

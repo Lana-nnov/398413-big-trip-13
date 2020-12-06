@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const getListPoint = (point) => {
   const {place, type, dateStart, dateFinish, isFavorite} = point;
@@ -58,26 +58,25 @@ const getListPoint = (point) => {
             </li>`;
 };
 
-class ListPoint {
+class ListPoint extends AbstractView {
   constructor(point) {
+    super();
     this._element = null;
     this._point = point;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return getListPoint(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler() {
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener(`click`, this._clickHandler);
   }
 }
 

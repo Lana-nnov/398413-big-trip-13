@@ -11,7 +11,7 @@ import {ListPoint} from "./view/list-point";
 import {generatePoint} from "./mock/task.js";
 import {LIST_COUNT} from "./const.js";
 import {THIRD_POINT} from "./const.js";
-import {render, renderElement, RenderPosition} from "./utils.js";
+import {render, RenderPosition, replace} from "./utils/render.js";
 
 const points = new Array(LIST_COUNT).fill().map(generatePoint);
 
@@ -19,50 +19,38 @@ const renderPoint = (pointListElement, point) => {
   const pointComponent = new ListPoint(point);
   const pointEditComponent = new FormEdit(point);
   
-  const addEventTypeList = (point) => {
-    const eventTypeWrapper = pointEditComponent.getElement().querySelector('.event__type-wrapper');
-  } 
-  
-  const replacePointToForm = (point) => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
-    addEventTypeList(point);    
+  const replacePointToForm = () => {
+    replace(pointEditComponent, pointComponent);    
   };    
   
   const replaceFormToPoint = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   }; 
   
-  pointComponent.getElement()
-  .querySelector(`.event__rollup-btn`)
-  .addEventListener(`click`, replacePointToForm);
-  
-  pointEditComponent.getElement()
-  .querySelector(`form`)
-  .addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToPoint();
-  });
-  
-  render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  pointComponent.setEditClickHandler(() => replacePointToForm()); 
+    
+  pointEditComponent.setFormSubmitHandler(() => replaceFormToPoint());
+    
+  render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
 // HEADER
 const mainContainer = document.querySelector(`.trip-main`);
-render(mainContainer, new HeaderInfoTemplate().getElement(), RenderPosition.AFTERBEGIN);
+render(mainContainer, new HeaderInfoTemplate(), RenderPosition.AFTERBEGIN);
 const headerContainer = document.querySelector(`.trip-info`);
-render(mainContainer, new InfoDestination(points).getElement(), RenderPosition.AFTERBEGIN);
-render(headerContainer, new InfoPrice().getElement(), RenderPosition.BEFOREEND);
+render(mainContainer, new InfoDestination(points), RenderPosition.AFTERBEGIN);
+render(headerContainer, new InfoPrice(), RenderPosition.BEFOREEND);
 
 //MENU
-render(mainContainer, new MenuControls().getElement(), RenderPosition.BEFOREEND);
+render(mainContainer, new MenuControls(), RenderPosition.BEFOREEND);
 const menuContainer = document.querySelector(`.trip-controls`);
-render(menuContainer, new MenuTabs().getElement(), RenderPosition.AFTERBEGIN);
-render(menuContainer, new MenuFilters().getElement(), RenderPosition.BEFOREEND);
+render(menuContainer, new MenuTabs(), RenderPosition.AFTERBEGIN);
+render(menuContainer, new MenuFilters(), RenderPosition.BEFOREEND);
 
 //MAIN (forms)
 const eventsContainer = document.querySelector(`.trip-events`); 
-render(eventsContainer, new FormSort().getElement(), RenderPosition.AFTERBEGIN); 
-render(eventsContainer, new List().getElement(), RenderPosition.BEFOREEND); 
+render(eventsContainer, new FormSort(), RenderPosition.AFTERBEGIN); 
+render(eventsContainer, new List(), RenderPosition.BEFOREEND); 
 const eventsList = document.querySelector('.trip-events__list');
 
 //MAIN (points-list)
