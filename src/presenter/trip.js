@@ -1,10 +1,10 @@
 import {List} from "../view/list-all";
 import Point from './point.js';
-import {render, RenderPosition, replace} from "../utils/render.js";
+import {render, RenderPosition} from "../utils/render.js";
 import {updateItem} from "../utils/common.js";
 
 export default class Trip {
-  constructor(tripContainer, point) {
+  constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._listComponent = new List();
     this._pointPresenter = {};
@@ -24,7 +24,7 @@ export default class Trip {
 
   _renderPoint(point) {
     const pointPresenter = new Point(this._listComponent, this._handlePointChange, this._handleModeChange);
-    pointPresenter.init(point);   
+    pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
 
@@ -39,7 +39,7 @@ export default class Trip {
 
   _renderNoPoints() {
     // Метод для рендеринга заглушки
-  }   
+  }
 
   _handleModeChange() {
     Object
@@ -51,7 +51,7 @@ export default class Trip {
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};    
+    this._pointPresenter = {};
   }
 
   _renderBoard() {

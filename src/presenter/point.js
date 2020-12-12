@@ -9,7 +9,7 @@ const Mode = {
 
 export default class Point {
   constructor(pointListContainer, changeData, changeMode) {
-    this._pointListContainer = pointListContainer;    
+    this._pointListContainer = pointListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -18,7 +18,7 @@ export default class Point {
     this._mode = Mode.DEFAULT;
 
     this._handleEditClick = this._handleEditClick.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);  
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
@@ -26,20 +26,20 @@ export default class Point {
     this._point = point;
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
-    
+
     this._pointComponent = new ListPoint(point);
-    this._pointEditComponent = new FormEdit(point);    
-   
+    this._pointEditComponent = new FormEdit(point);
+
     this._pointComponent.setEditClickHandler(this._handleEditClick);
-    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit); 
+    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    
+
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this._pointListContainer, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {  
+    if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPointComponent);
     }
 
@@ -50,7 +50,7 @@ export default class Point {
     remove(prevPointComponent);
     remove(prevPointEditComponent);
   }
-  
+
   destroy() {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
@@ -63,13 +63,13 @@ export default class Point {
   }
 
   _replaceCardToForm() {
-    replace(this._pointEditComponent,  this._pointComponent);
+    replace(this._pointEditComponent, this._pointComponent);
     this._changeMode();
     this._mode = Mode.EDITING;
-  } 
+  }
 
   _replaceFormToCard() {
-    replace(this._pointComponent,  this._pointEditComponent);
+    replace(this._pointComponent, this._pointEditComponent);
     this._mode = Mode.DEFAULT;
   }
 
