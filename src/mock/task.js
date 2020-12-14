@@ -6,6 +6,8 @@ import {getRandomInteger} from "../utils/common.js";
 import {shuffleArray} from "../utils/common.js";
 import dayjs from "dayjs";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
   const descriptionBlock = [];
@@ -55,6 +57,7 @@ const getPhotosBlock = () => {
 const generatePoint = () => {
   const dateStart = generateDateStart();
   return {
+    id: generateId(),
     place: getRandomPlace(),
     dateStart,
     dateFinish: generateDateFinish(dateStart),
