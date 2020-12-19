@@ -26,7 +26,7 @@ const getListPoint = (point) => {
       sum.push(addSum);
     }
     if (sum.length !== 0) {
-      const totalSum = sum.reduce(function(total, amount) {
+      const totalSum = sum.reduce (function(total, amount) {
         return total + amount;
       });
       return `<span class="event__price-value">${(totalSum)}</span>`;
