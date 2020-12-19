@@ -19,29 +19,29 @@ const getListPoint = (point) => {
     return hours + `H ` + minutes + `M`;
   };
 
-  const getPrice = (offers) => {
+  const getPrice = (offersPrice) => {
     const sum = [];
-    for (var i = 0; i < offers.length; i++) {
-      const addSum = +offers[i].price;
+    for (let i = 0; i < offersPrice.length; i++) {
+      const addSum = +offersPrice[i].price;
       sum.push(addSum);
     }
-    if (sum.length != 0) {
-      const totalSum = sum.reduce( function(total, amount){
-        return total + amount
+    if (sum.length !== 0) {
+      const totalSum = sum.reduce(function(total, amount) {
+        return total + amount;
       });
-      return `<span class="event__price-value">${(totalSum)}</span>`
+      return `<span class="event__price-value">${(totalSum)}</span>`;
     }
     return `<span></span>`;
-  } 
+  };
 
-  const getFirstOffer = (offers) => {
-    if(offers.length != 0) {
-      return `<span class="event__offer-title">${offers[0]['name']}</span>
+  const getFirstOffer = (offersList) => {
+    if (offersList.length !== 0) {
+      return `<span class="event__offer-title">${offers[0][`name`]}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offers[0]['price']}</span>`
+        <span class="event__offer-price">${offers[0][`price`]}</span>`;
     }
-    return '<span>No offers</span>'
-  }
+    return `<span>No offers</span>`;
+  };
 
   return `<li class="trip-events__item">
               <div class="event">

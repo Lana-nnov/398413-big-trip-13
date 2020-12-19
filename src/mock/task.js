@@ -1,4 +1,3 @@
-import {TYPES} from "../const.js";
 import {PLACES} from "../const.js";
 import {DESCRIPTIONS} from "../const.js";
 import {FHOTOS_COUNT} from "../const.js";
@@ -59,42 +58,42 @@ const getPhotosBlock = () => {
 
 const getRandomType = () => {
   const randomIndex = getRandomInteger(0, Object.keys(TYPES_WITH_OFFERS).length - 1);
-  return Object.keys(TYPES_WITH_OFFERS)[randomIndex];  
+  return Object.keys(TYPES_WITH_OFFERS)[randomIndex];
 };
 
 
 export const TYPES_WITH_OFFERS = {
   Taxi: {type: `Taxi`,
-  offers: getRandomOffers()
+    offers: getRandomOffers()
   },
   Bus: {type: `Bus`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Train: {type: `Train`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Ship: {type: `Taxi`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Transport: {type: `Transport`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Drive: {type: `Drive`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Flight: {type: `Flight`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   CheckIn: {type: `Check-in`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   },
   Sightseeing: {type: `Sightseeing`,
-  offers: shuffleArray(getRandomOffers())  
+    offers: shuffleArray(getRandomOffers())
   },
   Restaurant: {type: `Restaurant`,
-  offers: shuffleArray(getRandomOffers())
+    offers: shuffleArray(getRandomOffers())
   }
-}; 
+};
 
 const generatePoint = () => {
   const dateStart = generateDateStart();
@@ -105,9 +104,9 @@ const generatePoint = () => {
     dateStart,
     dateFinish: generateDateFinish(dateStart),
     description: generateDescription(),
-    photos: getPhotosBlock(),      
+    photos: getPhotosBlock(),
     type: TYPES_WITH_OFFERS[type][`type`],
-    offers: TYPES_WITH_OFFERS[type]['offers'],
+    offers: TYPES_WITH_OFFERS[type][`offers`],
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };

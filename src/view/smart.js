@@ -14,16 +14,16 @@ export default class Smart extends Abstract {
         {},
         this._data,
         update
-    );    
+    );
 
     if (justDataUpdating) {
       return;
-    }    
-    this.updateElement();    
+    }
+    this.updateElement();
   }
 
   updateElement() {
-    let prevElement = this.getElement();    
+    let prevElement = this.getElement();
     const parent = prevElement.parentElement;
     this.removeElement();
 
