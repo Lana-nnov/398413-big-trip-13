@@ -13,7 +13,7 @@ const getEventEditTemplate = (data) => {
 
   const dateFirst = dayjs(dateStart).format(`DD/MM/YY-hh:mm`);
   const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-hh:mm`);
-  const photosList = createPhotoList();  
+  const photosList = createPhotoList();
 
   const getEventTypeList = () => {
     const getTypeItem = (types) => {
@@ -43,8 +43,8 @@ const getEventEditTemplate = (data) => {
       }
       return `<span></span>`;
     };
-    const getOfferItem = (offers) => {
-      return offers.map((elem) => {
+    const getOfferItem = (offersBlocks) => {
+      return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
                   <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" name="event-offer-luggage" checked>
                     <label class="event__offer-label" for="event-offer-luggage-1">
@@ -53,8 +53,8 @@ const getEventEditTemplate = (data) => {
                         <span class="event__offer-price">${elem.price}</span>
                   </label>
                 </div>`;
-        }).join(``);
-    }
+      }).join(``);
+    };
 
     return `${getOfferTitle(offers)}<div class="event__available-offers">${getOfferItem(Object.values(offers))}</div>`;
   };
