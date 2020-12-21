@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 
 const getListPoint = (point) => {
-  const {place, type, dateStart, dateFinish, isFavorite} = point;
+  const {place, type, dateStart, dateFinish, isFavorite, offers} = point;
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ` `;
   const dateFirst = dayjs(dateStart).format(`HH:mm`);
   const dateSecond = dayjs(dateFinish).format(`HH:mm`);
@@ -17,6 +17,30 @@ const getListPoint = (point) => {
     const minutes = Math.floor((hoursms) / (60 * 1000));
     // const minutesms = ms % (60 * 1000);
     return hours + `H ` + minutes + `M`;
+  };
+
+  const getPrice = (offersPrice) => {
+    const sum = [];
+    for (let i = 0; i < offersPrice.length; i++) {
+      const addSum = +offersPrice[i].price;
+      sum.push(addSum);
+    }
+    if (sum.length !== 0) {
+      const totalSum = sum.reduce(function (total, amount) {
+        return total + amount;
+      });
+      return `<span class="event__price-value">${(totalSum)}</span>`;
+    }
+    return `<span></span>`;
+  };
+
+  const getFirstOffer = (offersList) => {
+    if (offersList.length !== 0) {
+      return `<span class="event__offer-title">${offers[0][`name`]}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offers[0][`price`]}</span>`;
+    }
+    return `<span>No offers</span>`;
   };
 
   return `<li class="trip-events__item">
@@ -35,14 +59,12 @@ const getListPoint = (point) => {
                   <p class="event__duration">${getToHouresMinutes(diff)}</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;<span class="event__price-value">20</span>
+                  &euro;&nbsp;${getPrice(Object.values(offers))}
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
                   <li class="event__offer">
-                    <span class="event__offer-title">Order Uber</span>
-                    &plus;&euro;&nbsp;
-                    <span class="event__offer-price">20</span>
+                    ${getFirstOffer(Object.values(offers))}
                   </li>
                 </ul>
                 <button class="event__favorite-btn ${favoriteClassName}" type="button">

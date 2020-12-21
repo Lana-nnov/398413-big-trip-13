@@ -10,6 +10,23 @@ export const DESCRIPTIONS = [
   'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam.'
 ];
 
+export const OFFERS = {
+  AddLuggage: {name: 'Add luggage',
+  price: '30'},
+  SwitchToComfortClass: {name: 'Switch to comfort class',
+  price: '100'},
+  AddMeal: {name: 'Add meal',
+  price: '15'},
+  AddSeats: {name: 'Choose seats',
+  price: '5'},
+  TravelByTrain: {name: 'Travel by train',
+  price: '40'},
+  TravelByTaxi: {name: 'Travel by taxi',
+  price: '10'},
+  AddInsurance: {name: 'AddInsurance',
+  price: '100'},  
+};  
+
 export const FHOTOS_COUNT = 5;
 export const LIST_COUNT = 10;
 export const THIRD_POINT = 2;
