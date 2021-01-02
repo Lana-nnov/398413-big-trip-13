@@ -1,30 +1,48 @@
 import AbstractView from "./abstract.js";
 
-const getMenuFilters = () => {
-  return `<form class="trip-filters" action="#" method="get">
-              <div class="trip-filters__filter">
-                <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
-                <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
-              </div>
+const createFilterItemTemplate = (filter, currentFilterType) => {
+  const {type, name, count} = filter;
+  return `<div class="trip-filters__filter">
+            <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" 
+            ${type === currentFilterType ? `checked` : ``} 
+            value="${type}">
+            <label class="trip-filters__filter-label" for="filter-${name}">${name}</label>
+          </div>`             
+};
 
-              <div class="trip-filters__filter">
-                <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
-                <label class="trip-filters__filter-label" for="filter-future">Future</label>
-              </div>
+export const createFilterTemplate = (filterItems, currentFilterType) => {
+  const filterItemsTemplate = filterItems
+    .map((filter) => createFilterItemTemplate(filter, currentFilterType))
+    .join(``);
 
-              <div class="trip-filters__filter">
-                <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
-                <label class="trip-filters__filter-label" for="filter-past">Past</label>
-              </div>
-
-              <button class="visually-hidden" type="submit">Accept filter</button>
-            </form>`;
+  return `<section class="main__filter filter container">
+    ${filterItemsTemplate}
+  </section>`;
 };
 
 class MenuFilters extends AbstractView {
-  getTemplate() {
-    return getMenuFilters();
+  constructor(filters, currentFilterType) {
+    super();
+    this._filters = filters;
+    this._currentFilter = currentFilterType;
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
+
+  getTemplate() {
+    return createFilterTemplate(this._filters, this._currentFilter);
+  }
+
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);    
+    //this.getElement().querySelector('.trip-filters__filter-input').addEventListener(`click`, this._filterTypeChangeHandler);    
+  }  
 }
 
 export {MenuFilters};

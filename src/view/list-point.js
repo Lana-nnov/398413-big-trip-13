@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 
 const getListPoint = (point) => {
-  const {place, type, dateStart, dateFinish, isFavorite, offers} = point;
+  const {place, price, type, dateStart, dateFinish, isFavorite, offers} = point;
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ` `;
   const dateFirst = dayjs(dateStart).format(`HH:mm`);
   const dateSecond = dayjs(dateFinish).format(`HH:mm`);
@@ -35,10 +35,11 @@ const getListPoint = (point) => {
   };
 
   const getFirstOffer = (offersList) => {
-    if (offersList.length !== 0) {
-      return `<span class="event__offer-title">${offers[0][`name`]}</span>
+    const objIndex = offersList.findIndex((obj => obj.isChecked === true));
+    if (offersList.length !== 0 && objIndex >= 0) {
+      return `<span class="event__offer-title">${offers[objIndex][`name`]}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offers[0][`price`]}</span>`;
+        <span class="event__offer-price">${offers[objIndex][`price`]}</span>`;
     }
     return `<span>No offers</span>`;
   };
@@ -59,7 +60,7 @@ const getListPoint = (point) => {
                   <p class="event__duration">${getToHouresMinutes(diff)}</p>
                 </div>
                 <p class="event__price">
-                  &euro;&nbsp;${getPrice(Object.values(offers))}
+                  &euro;&nbsp;${price}
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">

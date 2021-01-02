@@ -2,9 +2,11 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 import {TYPES} from "../const.js";
 import {TYPES_WITH_OFFERS, generateDescription} from "../mock/task.js";
+import flatpickr from "flatpickr";
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const getEventEditTemplate = (data) => {
-  const {description, place, type, dateStart, dateFinish, photos, offers} = data;
+  const {description, place, price, type, dateStart, dateFinish, photos, offers} = data;
   const createPhotoList = () => {
     return photos.map((elem) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
@@ -43,11 +45,12 @@ const getEventEditTemplate = (data) => {
       }
       return `<span></span>`;
     };
+
     const getOfferItem = (offersBlocks) => {
-      return offersBlocks.map((elem) => {
+      return offersBlocks.map((elem) => {         
         return `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" name="event-offer-luggage" checked>
-                    <label class="event__offer-label" for="event-offer-luggage-1">
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, '-')}" type="checkbox" name="event-offer-luggage">
+                    <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, '-')}">
                         <span class="event__offer-title">${elem.name}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${elem.price}</span>
@@ -93,7 +96,7 @@ const getEventEditTemplate = (data) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
@@ -153,12 +156,18 @@ class FormEdit extends SmartView {
   constructor(point) {
     super();
     this._element = null;
+    this._datepicker = null;
     this._point = point;
     this._data = FormEdit.parsePointToData(point);
     this._clickHandler = this._clickHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._offerCheckedHandler = this._offerCheckedHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._dueDateChangeHandler = this._dueDateChangeHandler.bind(this);
     this._setInnerHandlers();
+    this._setDatepicker();
   }
 
   getTemplate() {
@@ -175,12 +184,69 @@ class FormEdit extends SmartView {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
+  _setDatepicker() {
+    if (this._datepicker) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    if (this._data.isDueDate) {
+      // flatpickr есть смысл инициализировать только в случае,
+      // если поле выбора даты доступно для заполнения
+      this._datepicker = flatpickr(
+          this.getElement().querySelector(`.event__input--time`),
+          {
+            dateFormat: `j F`,
+            defaultDate: this._data.dateStart,
+            onChange: this._dueDateChangeHandler // На событие flatpickr передаём наш колбэк
+          }
+      );
+    }
+  }
+
+  _dueDateChangeHandler([userDate]) {
+    // По заданию дедлайн у задачи устанавливается без учёта времеми,
+    // но объект даты без времени завести нельзя,
+    // поэтому будем считать срок у всех задач -
+    // это 23:59:59 установленной даты
+    console.log(99)
+
+    this.updateData({
+      dueDate: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+    });
+  }
+
   _destinationChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
       place: evt.target.value,
-      description: generateDescription()
+      //description: generateDescription()
     });
+  }
+
+  _priceChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value
+    });
+  }
+
+  _offerCheckedHandler(evt) {    
+    const target = evt.target.id.slice(12).replace(/\W/g, ` `); 
+    const offers = this._point.offers.slice();
+    const objIndex = offers.findIndex((obj => obj.name === target));
+    offers[objIndex].isChecked = true;
+    this.updateData({
+      offers      
+    });
+    console.log(this._data)
   }
 
   _typeChangeHandler(evt) {
@@ -189,19 +255,62 @@ class FormEdit extends SmartView {
       type: evt.target.value,
       offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
     });
+    console.log(this._data)
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    /*if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }                             ДОБАВИТЬ!!!!!!!!!!!!!!!!!!!!!*/
+  }
+
+  _formDeleteClickHandler(evt) {
+    console.log(evt)
+    evt.preventDefault();
+    this._callback.deleteClick(FormEdit.parseDataToPoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler); 
   }
 
   _setInnerHandlers() {
+    console.log(this.getElement()
+    .querySelector(`.event__input--time`))
+    this.getElement()
+      .querySelector(`.event__input--time`)
+      .addEventListener(`click`, this._dueDateToggleHandler);
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationChangeHandler);
     this.getElement()
       .querySelector(`.event__type-list`)
       .addEventListener(`change`, this._typeChangeHandler);
-  }
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`change`, this._priceChangeHandler); 
+    if(this.getElement().querySelector(`.event__offer-checkbox`)) {
+      let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
+      /*array.forEach(function(btn) {
+          console.log(btn);
+          console.log(this._offerCheckedHandler);
+           
+        });*/        
+     array.forEach(element => {element.addEventListener('click', this._offerCheckedHandler)});
+
+
+      //array.forEach(element) => {element.addEventListener(`click`, console.log(99)};       
+      //this.getElement().querySelector(`.event__offer-checkbox`).addEventListener(`click`, this._offerCheckedHandler);      
+    }  
+  }    
 
   restoreHandlers() {
-    this._setInnerHandlers();
+    this._setInnerHandlers();    
+    this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
