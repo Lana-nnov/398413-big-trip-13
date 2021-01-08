@@ -14,17 +14,17 @@ const BLANK_POINT = {
   dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
   description: ``,
   photos: [],
-  type: ['taxi'],
+  type: [`taxi`],
   offers: [],
   isFavorite: false
-};  
+};
 
 const getEventEditTemplate = (data) => {
   const {description, place, price, type, dateStart, dateFinish, photos, offers} = data;
-    
+
   const createPlacesList = () => {
     return PLACES.map((elem) => {
-      return `<option value="${elem}"></option>`
+      return `<option value="${elem}"></option>`;
     }).join(``);
   };
 
@@ -69,7 +69,7 @@ const getEventEditTemplate = (data) => {
     };
 
     const getOfferItem = (offersBlocks) => {
-      return offersBlocks.map((elem) => {         
+      return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
                   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, '-')}" type="checkbox" name="event-offer-luggage">
                     <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, '-')}">
@@ -220,7 +220,7 @@ class FormEdit extends SmartView {
       this._datepicker = null;
     }
 
-    if (this._data.dateStart) {      
+    if (this._data.dateStart) {
       // flatpickr есть смысл инициализировать только в случае,
       // если поле выбора даты доступно для заполнения
       this._datepicker = flatpickr(
@@ -233,7 +233,7 @@ class FormEdit extends SmartView {
       );
     }
 
-    if (this._data.dateFinish) {      
+    if (this._data.dateFinish) {
       // flatpickr есть смысл инициализировать только в случае,
       // если поле выбора даты доступно для заполнения
       this._datepicker = flatpickr(
@@ -268,33 +268,33 @@ class FormEdit extends SmartView {
     });
   }
 
-  _destinationChangeHandler(evt) {    
+  _destinationChangeHandler(evt) {
     evt.preventDefault();
     const place = PLACES.find((elem) => elem === evt.target.value);
-    if(place) {
+    if (place) {
       this.updateData({
         place: place,
-        //description: generateDescription()
+        description: generateDescription()
       });
-   }
+    }
   }
 
-  _priceChangeHandler(evt) {    
+  _priceChangeHandler(evt) {
     evt.preventDefault();
-    if(isNumber(evt.target.value)) {
-      this.updateData({
+      if (isNumber(evt.target.value)) {
+        this.updateData({
         price: evt.target.value
       });
-   }
+    }
   }
 
-  _offerCheckedHandler(evt) {    
-    const target = evt.target.id.slice(12).replace(/\W/g, ` `); 
+  _offerCheckedHandler(evt) {
+    const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._point.offers.slice();
     const objIndex = offers.findIndex((obj => obj.name === target));
     offers[objIndex].isChecked = true;
     this.updateData({
-      offers      
+      offers
     });
   }
 
@@ -322,10 +322,10 @@ class FormEdit extends SmartView {
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler); 
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
-  _setInnerHandlers() {     
+  _setInnerHandlers() {
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationChangeHandler);
@@ -334,27 +334,18 @@ class FormEdit extends SmartView {
       .addEventListener(`change`, this._typeChangeHandler);
     this.getElement()
       .querySelector(`.event__input--price`)
-      .addEventListener(`change`, this._priceChangeHandler); 
+      .addEventListener(`change`, this._priceChangeHandler);
     if(this.getElement().querySelector(`.event__offer-checkbox`)) {
-      let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));             
-      array.forEach(element => {element.addEventListener('click', this._offerCheckedHandler)}); 
-    }  
-  }    
+      let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
+      array.forEach(element => {element.addEventListener('click', this._offerCheckedHandler)});
+    }
+  }
 
   restoreHandlers() {
-    this._setInnerHandlers();    
+    this._setInnerHandlers();
     this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
-
-  /*_dueDateToggleHandler(evt) {
-    evt.preventDefault();
-    debugger
-    this.updateData({
-      dateStart: !this._data.dateStart,
-      dateFinish: !this._data.dateFinish
-    });
-  }*/
 
   static parsePointToData(point) {
     return Object.assign({}, point);

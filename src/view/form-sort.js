@@ -42,7 +42,7 @@ class FormSort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (!evt.target.dataset.sortType) {       
+    if (!evt.target.dataset.sortType) {
       return;
     }
 

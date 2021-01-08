@@ -19,7 +19,7 @@ export default class Filter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init() {  
+  init() {
     this._currentFilter = this._filterModel.getFilter();
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
@@ -36,7 +36,8 @@ export default class Filter {
   }
 
   _handleModelEvent() {
-    this.init(); //перерисовывает снова фильтр
+    this.init();
+    //перерисовывает снова фильтр
   }
 
   _handleFilterTypeChange(filterType) {
@@ -69,3 +70,4 @@ export default class Filter {
     ];
   }
 }
+

@@ -1,13 +1,13 @@
 import AbstractView from "./abstract.js";
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
-  const {type, name, count} = filter;
+  const {type, name} = filter;
   return `<div class="trip-filters__filter">
             <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" 
             ${type === currentFilterType ? `checked` : ``} 
             value="${type}">
             <label class="trip-filters__filter-label" for="filter-${name}">${name}</label>
-          </div>`             
+          </div>`
 };
 
 export const createFilterTemplate = (filterItems, currentFilterType) => {
@@ -42,9 +42,8 @@ class MenuFilters extends AbstractView {
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);    
-    //this.getElement().querySelector('.trip-filters__filter-input').addEventListener(`click`, this._filterTypeChangeHandler);    
-  }  
+    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);
+  }
 }
 
 export {MenuFilters};

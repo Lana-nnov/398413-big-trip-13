@@ -83,8 +83,10 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
-        UserAction.UPDATE_POINT, //действие пользователя на обновление задачи
-        UpdateType.MINOR, //тип обновления минорный, так как это отдельная задача
+        UserAction.UPDATE_POINT, 
+        //действие пользователя на обновление задачи
+        UpdateType.MINOR, 
+        //тип обновления минорный, так как это отдельная задача
         Object.assign(
             {},
             this._point,
@@ -110,9 +112,9 @@ export default class Point {
   }
 
   /*_handleFormSubmit(point) {
-    this._changeData(point);    
+    this._changeData(point);
     this._replaceFormToCard();
-  }*/  
+  }*/
 
   _handleDeleteClick(point) {
     this._changeData(

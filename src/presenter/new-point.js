@@ -15,7 +15,7 @@ export default class PointNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(point) {    
+  init(point) {
     this._point = point;
     if (this._pointEditComponent !== null) {
       return;
@@ -45,7 +45,7 @@ export default class PointNew {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
-  _handleFormSubmit(point) {    
+  _handleFormSubmit(point) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
