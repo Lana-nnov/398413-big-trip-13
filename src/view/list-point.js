@@ -19,7 +19,7 @@ const getListPoint = (point) => {
     return hours + `H ` + minutes + `M`;
   };
 
-  const getPrice = (offersPrice) => {
+  /* const getPrice = (offersPrice) => {
     const sum = [];
     for (let i = 0; i < offersPrice.length; i++) {
       const addSum = +offersPrice[i].price;
@@ -32,10 +32,10 @@ const getListPoint = (point) => {
       return `<span class="event__price-value">${(totalSum)}</span>`;
     }
     return `<span></span>`;
-  };
+  }; */
 
   const getFirstOffer = (offersList) => {
-    const objIndex = offersList.findIndex((obj => obj.isChecked === true));
+    const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));
     if (offersList.length !== 0 && objIndex >= 0) {
       return `<span class="event__offer-title">${offers[objIndex][`name`]}</span>
         &plus;&euro;&nbsp;

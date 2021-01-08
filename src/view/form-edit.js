@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import he from "he";
+// import he from "he";
 import SmartView from "./smart.js";
 import {TYPES, PLACES} from "../const.js";
 import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
@@ -71,8 +71,8 @@ const getEventEditTemplate = (data) => {
     const getOfferItem = (offersBlocks) => {
       return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, '-')}" type="checkbox" name="event-offer-luggage">
-                    <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, '-')}">
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
+                    <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, `-`)}">
                         <span class="event__offer-title">${elem.name}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${elem.price}</span>
@@ -281,8 +281,8 @@ class FormEdit extends SmartView {
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
-      if (isNumber(evt.target.value)) {
-        this.updateData({
+    if (isNumber(evt.target.value)) {
+      this.updateData({
         price: evt.target.value
       });
     }
@@ -291,7 +291,7 @@ class FormEdit extends SmartView {
   _offerCheckedHandler(evt) {
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._point.offers.slice();
-    const objIndex = offers.findIndex((obj => obj.name === target));
+    const objIndex = offers.findIndex(((obj) => obj.name === target));
     offers[objIndex].isChecked = true;
     this.updateData({
       offers
@@ -335,9 +335,9 @@ class FormEdit extends SmartView {
     this.getElement()
       .querySelector(`.event__input--price`)
       .addEventListener(`change`, this._priceChangeHandler);
-    if(this.getElement().querySelector(`.event__offer-checkbox`)) {
+    if (this.getElement().querySelector(`.event__offer-checkbox`)) {
       let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
-      array.forEach(element => {element.addEventListener('click', this._offerCheckedHandler)});
+      array.forEach((element) => {element.addEventListener('click', this._offerCheckedHandler)});
     }
   }
 

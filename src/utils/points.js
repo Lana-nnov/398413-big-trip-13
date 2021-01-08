@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 export const sortPointTime = (pointA, pointB) => {
   const durationPointA = dayjs(pointA.dateFinish).diff(dayjs(pointA.dateStart));
   const durationPointB = dayjs(pointB.dateFinish).diff(dayjs(pointB.dateStart));
-  return durationPointB - durationPointA;    
+  return durationPointB - durationPointA;
 };
 
 export const sortPointPrice = (priceA, priceB) => {

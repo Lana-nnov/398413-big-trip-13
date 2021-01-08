@@ -37,7 +37,6 @@ export default class Filter {
 
   _handleModelEvent() {
     this.init();
-    //перерисовывает снова фильтр
   }
 
   _handleFilterTypeChange(filterType) {
