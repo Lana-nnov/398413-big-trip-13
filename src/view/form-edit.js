@@ -290,8 +290,8 @@ class FormEdit extends SmartView {
 
   _offerCheckedHandler(evt) {
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
-    const offers = this._point.offers.slice();
-    const objIndex = offers.findIndex(((obj) => obj.name === target));
+    const offers = this._data.offers.slice();
+    const objIndex = offers.findIndex(obj => obj.name === target);
     offers[objIndex].isChecked = true;
     this.updateData({
       offers
@@ -337,7 +337,9 @@ class FormEdit extends SmartView {
       .addEventListener(`change`, this._priceChangeHandler);
     if (this.getElement().querySelector(`.event__offer-checkbox`)) {
       let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
-      array.forEach((element) => { element.addEventListener(`click`, this._offerCheckedHandler) });
+      array.forEach((element) => {
+          element.addEventListener(`click`, this._offerCheckedHandler);
+        });
     }
   }
 
