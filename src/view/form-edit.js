@@ -270,10 +270,10 @@ class FormEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const place = PLACES.find((elem) => elem === evt.target.value);
-    if (place) {
+    const city = PLACES.find((elem) => elem === evt.target.value);
+    if (city) {
       this.updateData({
-        place: place,
+        place: city,
         description: generateDescription()
       });
     }
@@ -291,7 +291,7 @@ class FormEdit extends SmartView {
   _offerCheckedHandler(evt) {
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._data.offers.slice();
-    const objIndex = offers.findIndex(obj => obj.name === target);
+    const objIndex = offers.findIndex((obj) => obj.name === target);
     offers[objIndex].isChecked = true;
     this.updateData({
       offers
@@ -338,8 +338,8 @@ class FormEdit extends SmartView {
     if (this.getElement().querySelector(`.event__offer-checkbox`)) {
       let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
       array.forEach((element) => {
-          element.addEventListener(`click`, this._offerCheckedHandler);
-        });
+        element.addEventListener(`click`, this._offerCheckedHandler);
+      });
     }
   }
 
