@@ -337,7 +337,7 @@ class FormEdit extends SmartView {
       .addEventListener(`change`, this._priceChangeHandler);
     if (this.getElement().querySelector(`.event__offer-checkbox`)) {
       let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
-      array.forEach((element) => {element.addEventListener('click', this._offerCheckedHandler)});
+      array.forEach((element) => { element.addEventListener(`click`, this._offerCheckedHandler) });
     }
   }
 

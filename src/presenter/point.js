@@ -83,8 +83,8 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
-        UserAction.UPDATE_POINT,        
-        UpdateType.MINOR,        
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._point,

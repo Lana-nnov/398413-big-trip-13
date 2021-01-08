@@ -16,7 +16,7 @@ export default class Trip {
     this._listComponent = new List();
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
-    
+
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
