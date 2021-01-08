@@ -42,7 +42,6 @@ class FormSort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    console.log(evt.target)
     if (!evt.target.dataset.sortType) {       
       return;
     }

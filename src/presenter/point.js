@@ -1,5 +1,5 @@
-import {FormEdit} from "../view/form-edit";
-import {ListPoint} from "../view/list-point";
+import {FormEdit} from "../view/form-edit.js";
+import {ListPoint} from "../view/list-point.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
 import {isDatesEqual} from "../utils/points.js";

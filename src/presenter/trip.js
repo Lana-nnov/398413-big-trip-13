@@ -1,9 +1,11 @@
-import {List} from "../view/list-all";
+import {List} from "../view/list-all.js";
 import {FormSort} from "../view/form-sort.js";
 import Point from './point.js';
+import PointNewPresenter from './new-point.js';
+//import PointListView from "../view/point-list.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 //import {updateItem} from "../utils/common.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
 import {sortPointTime, sortPointPrice} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
 
@@ -25,24 +27,30 @@ export default class Trip {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointModel.addObserver(this._handleModelEvent);    
     this._filterModel.addObserver(this._handleModelEvent);
+    this._pointNewPresenter = new PointNewPresenter(tripContainer, this._handleViewAction);
   }
 
   init(points) {    
     this._renderBoard();
   }
 
+  createPoint() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
+  }
+
   _getPoints() {
     const filterType = this._filterModel.getFilter();
     const points = this._pointModel.getPoints();
-    const filtredPoints = filter[filterType](points);
-
-    switch (this._currentSortType) {
+    const filtredPoints = filter[filterType](points); //находим функцию по фильтрации в утилитах, куда передаем все точки    
+    switch (this._currentSortType) {        
       case SortType.BY_TIME:
         //return this._pointModel.getPoints().slice().sort(sortPointTime);  
-        return filtredPoints.sort(sortPointTime);
+        return filtredPoints.slice().sort(sortPointTime);
       case SortType.BY_PRICE:
         //return this._pointModel.getPoints().slice().sort(sortPointPrice);   
-        return filtredPoints.sort(sortPointPrice);    
+        return filtredPoints.slice().sort(sortPointPrice);    
       }
 
     return filtredPoints;
@@ -75,10 +83,9 @@ export default class Trip {
     this._renderBoard();    
   }
 
-  _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
+  _handleViewAction(actionType, updateType, update) { //передали данные в модель
     switch (actionType) {
-      case UserAction.UPDATE_POINT:
+      case UserAction.UPDATE_POINT: //вызываем нужный метод модели
         this._pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
@@ -90,8 +97,8 @@ export default class Trip {
     }
   }
 
-  _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+  _handleModelEvent(updateType, data) { //обработали, что модель изменилась, решаем, что хотим перерисовать
+    //передан, как наблюдатель в нашу модель this._pointModel.addObserver(this._handleModelEvent); 
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
@@ -104,8 +111,8 @@ export default class Trip {
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
-        this._clearTrip();
-        this._renderBoard({resetSortType: true});
+        this._clearTrip({resetSortType: true}); //сбрасывать ли выбранную сортировку - да
+        this._renderBoard();       
         break;
     }
   }
@@ -115,10 +122,7 @@ export default class Trip {
       this._sortComponent = null;
     }
 
-    console.log(this._sortComponent)
-
     this._sortComponent = new FormSort(this._currentSortType);
-    console.log(this._sortComponent)
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
     render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);

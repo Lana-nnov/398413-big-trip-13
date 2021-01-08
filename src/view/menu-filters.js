@@ -14,9 +14,11 @@ export const createFilterTemplate = (filterItems, currentFilterType) => {
   const filterItemsTemplate = filterItems
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
     .join(``);
-
   return `<section class="main__filter filter container">
-    ${filterItemsTemplate}
+    <form class="trip-filters" action="#" method="get">
+      <button class="visually-hidden" type="submit">Accept filter</button>
+      ${filterItemsTemplate}
+    </form>
   </section>`;
 };
 

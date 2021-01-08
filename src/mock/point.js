@@ -8,7 +8,7 @@ import {getRandomInteger} from "../utils/common.js";
 import {shuffleArray} from "../utils/common.js";
 import dayjs from "dayjs";
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 export const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);

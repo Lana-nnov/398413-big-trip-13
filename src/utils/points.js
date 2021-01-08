@@ -24,10 +24,15 @@ export const isDatePast = (date) => {
     }
     return false;
   };
-  export const isDateFuture = (date) => {
-    if (date > getCurrentDate()) {
-      return true;
-    }
-    return false;
-  };
+
+export const isDateFuture = (date) => {
+  if (date > getCurrentDate()) {
+    return true;
+  }
+  return false;
+};
+
+export const isNumber = (n) => {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
   

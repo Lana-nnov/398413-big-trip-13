@@ -5,7 +5,7 @@ import {MenuControls} from "./view/menu-controls";
 import {MenuTabs} from "./view/menu-tabs";
 import {MenuFilters} from "./view/menu-filters";
 import {FormSort} from "./view/form-sort";
-import {generatePoint} from "./mock/task.js";
+import {generatePoint} from "./mock/point.js";
 import {LIST_COUNT} from "./const.js";
 import {THIRD_POINT} from "./const.js";
 import {render, RenderPosition} from "./utils/render.js";
@@ -42,6 +42,12 @@ const filterPresenter = new FilterPresenter(menuContainer, filterModel, pointsMo
 //tripPresenter.init(points);
 tripPresenter.init();
 filterPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    tripPresenter.createPoint();
+  });
+
 
 
 

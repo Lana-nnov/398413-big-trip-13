@@ -40,7 +40,6 @@ export default class Points extends Observer {
   }
 
   deletePoint(updateType, update) {
-    console.log(updateType, update)
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
