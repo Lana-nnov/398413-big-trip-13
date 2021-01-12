@@ -32,7 +32,5 @@ export const isDateFuture = (date) => {
   return false;
 };
 
-export const isNumber = (n) => {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-};
+
 

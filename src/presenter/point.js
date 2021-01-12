@@ -21,7 +21,7 @@ export default class Point {
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);    
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleCloseFormClick = this._handleCloseFormClick.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
@@ -55,12 +55,13 @@ export default class Point {
     }
 
     remove(prevPointComponent);
-    remove(prevPointEditComponent);    
+    remove(prevPointEditComponent);
   }
 
   destroy() {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   resetView() {
@@ -83,7 +84,7 @@ export default class Point {
   }
 
   _handleEscKeyDown(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {      
+    if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._replaceFormToCard();
     }
@@ -111,7 +112,7 @@ export default class Point {
     const isMinorUpdate =
       !isDatesEqual(this._point.dateStart, update.dateStart) ||
       !isDatesEqual(this._point.dateFinish, update.dateFinish) ||
-      this._point.price !== update.price;
+      this._point.price !== update.price;    
 
     this._changeData(
         UserAction.UPDATE_POINT,
@@ -129,19 +130,8 @@ export default class Point {
     );
   }
 
-  _handleCloseFormClick(point) {
+  _handleCloseFormClick() {
     this._replaceFormToCard();
-  }
-
-  destroy() {
-    if (this._pointEditComponent === null) {
-      return;
-    }
-
-    remove(this._pointEditComponent);
-    this._pointEditComponent = null;
-
-    document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   _escKeyDownHandler(evt) {

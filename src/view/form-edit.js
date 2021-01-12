@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 import {TYPES, PLACES} from "../const.js";
 import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
-import {getCurrentDate, isNumber} from "../utils/points.js";
+import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -15,7 +15,7 @@ const BLANK_POINT = {
   description: ``,
   photos: [],
   type: [`taxi`],
-  offers: TYPES_WITH_OFFERS['Taxi'].offers,
+  offers: TYPES_WITH_OFFERS[`Taxi`].offers,
   isFavorite: false
 };
 
@@ -192,7 +192,7 @@ class FormEdit extends SmartView {
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._rollUpClickHandler = this._rollUpClickHandler.bind(this);
     this._dueFirstDateChangeHandler = this._dueFirstDateChangeHandler.bind(this);
-    this._dueSecondtDateChangeHandler = this._dueSecondtDateChangeHandler.bind(this);    
+    this._dueSecondtDateChangeHandler = this._dueSecondtDateChangeHandler.bind(this);
     this._setInnerHandlers();
     this._setDatepicker();
   }
@@ -200,8 +200,6 @@ class FormEdit extends SmartView {
   getTemplate() {
     return getEventEditTemplate(this._data);
   }
-
-  ///// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 
   _clickHandler(evt) {
     evt.preventDefault();
@@ -212,7 +210,7 @@ class FormEdit extends SmartView {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
- 
+  
   /*
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
@@ -289,7 +287,7 @@ class FormEdit extends SmartView {
         description: generateDescription()
       });
     }
-  }  
+  }
 
   _priceChangeHandler(evt) {
     evt.preventDefault();    
@@ -313,7 +311,7 @@ class FormEdit extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
-    });   
+    });
   }
 
   removeElement() {
@@ -334,7 +332,7 @@ class FormEdit extends SmartView {
     evt.preventDefault();
     this._callback.rollupClick(FormEdit.parseDataToPoint(this._data));
   }
-  
+
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
@@ -343,7 +341,7 @@ class FormEdit extends SmartView {
   setRollUpClickHandler(callback) {
     this._callback.rollupClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
-  } 
+  }
 
   _setInnerHandlers() {
     this.getElement()
@@ -360,11 +358,11 @@ class FormEdit extends SmartView {
       array.forEach((element) => {
         element.addEventListener(`click`, this._offerCheckedHandler);
       });
-    };  
+    }
   }
 
   restoreHandlers() {
-    this._setInnerHandlers();   
+    this._setInnerHandlers();
     this.setDeleteClickHandler(this._callback.deleteClick);
     this.setRollUpClickHandler(this._callback.rollupClick);
     this._setDatepicker();
@@ -376,10 +374,8 @@ class FormEdit extends SmartView {
   }
 
   static parseDataToPoint(data) {
-    const point = Object.assign({},
-        data);
-    return point;          
-  }  
+    return Object.assign({}, data);
+  }
 }
 
 export {FormEdit};

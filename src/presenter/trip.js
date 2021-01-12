@@ -20,7 +20,7 @@ export default class Trip {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent); 
+    this._filterModel.addObserver(this._handleModelEvent);
     this._pointNewPresenter = new PointNewPresenter(tripContainer.querySelector(`.trip-events__list`), this._handleViewAction);
   }
 
@@ -49,7 +49,6 @@ export default class Trip {
   }
 
   _clearTrip({resetSortType = false} = {}) {
-
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
