@@ -112,7 +112,7 @@ export default class Point {
     const isMinorUpdate =
       !isDatesEqual(this._point.dateStart, update.dateStart) ||
       !isDatesEqual(this._point.dateFinish, update.dateFinish) ||
-      this._point.price !== update.price;    
+      this._point.price !== update.price;
 
     this._changeData(
         UserAction.UPDATE_POINT,

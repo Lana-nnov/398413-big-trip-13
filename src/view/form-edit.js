@@ -210,7 +210,7 @@ class FormEdit extends SmartView {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
-  
+
   /*
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
@@ -290,7 +290,7 @@ class FormEdit extends SmartView {
   }
 
   _priceChangeHandler(evt) {
-    evt.preventDefault();    
+    evt.preventDefault();
     this.updateData({
       price: evt.target.value
     });

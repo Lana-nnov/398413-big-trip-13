@@ -32,5 +32,3 @@ export const isDateFuture = (date) => {
   return false;
 };
 
-
-
