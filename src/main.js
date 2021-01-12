@@ -3,6 +3,7 @@ import {InfoDestination} from "./view/header-info";
 import {InfoPrice} from "./view/header-info-price";
 import {MenuControls} from "./view/menu-controls";
 import {MenuTabs} from "./view/menu-tabs";
+import {List} from "./view/list-all.js";
 import {MenuFilters} from "./view/menu-filters";
 import {FormSort} from "./view/form-sort";
 import {generatePoint} from "./mock/point.js";
@@ -36,6 +37,7 @@ render(menuContainer, new MenuTabs(), RenderPosition.AFTERBEGIN);
 
 //MAIN (forms)
 const eventsContainer = document.querySelector(`.trip-events`); 
+render(eventsContainer, new List(), RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(eventsContainer, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(menuContainer, filterModel, pointsModel);
 //const tripPresenter = new TripPresenter(eventsContainer);

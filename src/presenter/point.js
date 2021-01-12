@@ -21,8 +21,10 @@ export default class Point {
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);    
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._handleCloseFormClick = this._handleCloseFormClick.bind(this);
+    this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
   }
 
   init(point) {
@@ -37,6 +39,7 @@ export default class Point {
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointEditComponent.setRollUpClickHandler(this._handleCloseFormClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this._pointListContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -52,7 +55,7 @@ export default class Point {
     }
 
     remove(prevPointComponent);
-    remove(prevPointEditComponent);
+    remove(prevPointEditComponent);    
   }
 
   destroy() {
@@ -70,11 +73,20 @@ export default class Point {
     replace(this._pointEditComponent, this._pointComponent);
     this._changeMode();
     this._mode = Mode.EDITING;
+    document.addEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _replaceFormToCard() {
     replace(this._pointComponent, this._pointEditComponent);
     this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, this._handleEscKeyDown);
+  }
+
+  _handleEscKeyDown(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {      
+      evt.preventDefault();
+      this._replaceFormToCard();
+    }
   }
 
   _handleEditClick() {
@@ -115,6 +127,28 @@ export default class Point {
         UpdateType.MINOR,
         point
     );
+  }
+
+  _handleCloseFormClick(point) {
+    this._replaceFormToCard();
+  }
+
+  destroy() {
+    if (this._pointEditComponent === null) {
+      return;
+    }
+
+    remove(this._pointEditComponent);
+    this._pointEditComponent = null;
+
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      this.resetView();
+    }
   }
 }
 

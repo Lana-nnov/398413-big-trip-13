@@ -15,7 +15,7 @@ const BLANK_POINT = {
   description: ``,
   photos: [],
   type: [`taxi`],
-  offers: [],
+  offers: TYPES_WITH_OFFERS['Taxi'].offers,
   isFavorite: false
 };
 
@@ -118,10 +118,13 @@ const getEventEditTemplate = (data) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button class="event__rollup-btn" type="button">
+                    <span class="visually-hidden">Open event</span>
+                  </button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">                    
@@ -187,8 +190,9 @@ class FormEdit extends SmartView {
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._offerCheckedHandler = this._offerCheckedHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._rollUpClickHandler = this._rollUpClickHandler.bind(this);
     this._dueFirstDateChangeHandler = this._dueFirstDateChangeHandler.bind(this);
-    this._dueSecondtDateChangeHandler = this._dueSecondtDateChangeHandler.bind(this);
+    this._dueSecondtDateChangeHandler = this._dueSecondtDateChangeHandler.bind(this);    
     this._setInnerHandlers();
     this._setDatepicker();
   }
@@ -196,6 +200,8 @@ class FormEdit extends SmartView {
   getTemplate() {
     return getEventEditTemplate(this._data);
   }
+
+  ///// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 
   _clickHandler(evt) {
     evt.preventDefault();
@@ -206,11 +212,17 @@ class FormEdit extends SmartView {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
-
+ 
+  /*
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._formDeleteClickHandler);
   }
+
+  setRollUpClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+  }*/
 
   _setDatepicker() {
     if (this._datepicker) {
@@ -277,15 +289,13 @@ class FormEdit extends SmartView {
         description: generateDescription()
       });
     }
-  }
+  }  
 
   _priceChangeHandler(evt) {
-    evt.preventDefault();
-    if (isNumber(evt.target.value)) {
-      this.updateData({
-        price: evt.target.value
-      });
-    }
+    evt.preventDefault();    
+    this.updateData({
+      price: evt.target.value
+    });
   }
 
   _offerCheckedHandler(evt) {
@@ -303,7 +313,7 @@ class FormEdit extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
-    });
+    });   
   }
 
   removeElement() {
@@ -320,10 +330,20 @@ class FormEdit extends SmartView {
     this._callback.deleteClick(FormEdit.parseDataToPoint(this._data));
   }
 
+  _rollUpClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick(FormEdit.parseDataToPoint(this._data));
+  }
+  
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
+
+  setRollUpClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+  } 
 
   _setInnerHandlers() {
     this.getElement()
@@ -340,11 +360,13 @@ class FormEdit extends SmartView {
       array.forEach((element) => {
         element.addEventListener(`click`, this._offerCheckedHandler);
       });
-    }
+    };  
   }
 
   restoreHandlers() {
-    this._setInnerHandlers();
+    this._setInnerHandlers();   
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setRollUpClickHandler(this._callback.rollupClick);
     this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
@@ -354,10 +376,10 @@ class FormEdit extends SmartView {
   }
 
   static parseDataToPoint(data) {
-    return Object.assign({},
+    const point = Object.assign({},
         data);
-  }
-
+    return point;          
+  }  
 }
 
 export {FormEdit};

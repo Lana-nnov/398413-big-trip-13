@@ -25,6 +25,8 @@ export default class PointNew {
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     render(this._pointListContainer, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+    this._pointListContainer.querySelector(`.event__reset-btn`).innerHTML = `Cancel`;
+    this._pointListContainer.querySelector(`.event__rollup-btn`).style.display = `none`;    
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
   }

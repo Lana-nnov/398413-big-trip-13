@@ -1,4 +1,3 @@
-import {List} from "../view/list-all.js";
 import {FormSort} from "../view/form-sort.js";
 import Point from './point.js';
 import PointNewPresenter from './new-point.js';
@@ -13,7 +12,6 @@ export default class Trip {
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._sortComponent = new FormSort();
-    this._listComponent = new List();
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
@@ -22,8 +20,8 @@ export default class Trip {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._pointNewPresenter = new PointNewPresenter(tripContainer, this._handleViewAction);
+    this._filterModel.addObserver(this._handleModelEvent); 
+    this._pointNewPresenter = new PointNewPresenter(tripContainer.querySelector(`.trip-events__list`), this._handleViewAction);
   }
 
   init() {
@@ -117,7 +115,8 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new Point(this._listComponent, this._handleViewAction, this._handleModeChange);
+    // const pointPresenter = new Point(this._listComponent, this._handleViewAction, this._handleModeChange);
+    const pointPresenter = new Point(this._tripContainer.querySelector(`.trip-events__list`), this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -126,11 +125,11 @@ export default class Trip {
     points.slice().forEach((point) => this._renderPoint(point));
   }
 
-  _renderPointsList() {
+  /* _renderPointsList() {
     render(this._tripContainer, this._listComponent, RenderPosition.BEFOREEND);
     const points = this._getPoints().slice();
     this._renderPoints(points);
-  }
+  }*/
 
   _renderNoPoints() {
     // Метод для рендеринга заглушки
@@ -152,6 +151,7 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderPointsList();
+    this._renderPoints(points);
+    // this._renderPointsList();
   }
 }
