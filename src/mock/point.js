@@ -2,11 +2,13 @@ import {PLACES} from "../const.js";
 import {DESCRIPTIONS} from "../const.js";
 import {FHOTOS_COUNT} from "../const.js";
 import {OFFERS} from "../const.js";
+import {MIN_PRICE} from "../const.js";
+import {MAX_PRICE} from "../const.js";
 import {getRandomInteger} from "../utils/common.js";
 import {shuffleArray} from "../utils/common.js";
 import dayjs from "dayjs";
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 export const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
@@ -100,6 +102,7 @@ const generatePoint = () => {
   const type = getRandomType();
   return {
     id: generateId(),
+    price: getRandomInteger(MIN_PRICE, MAX_PRICE),
     place: getRandomPlace(),
     dateStart,
     dateFinish: generateDateFinish(dateStart),

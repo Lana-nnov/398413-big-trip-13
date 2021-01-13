@@ -1,19 +1,43 @@
 import dayjs from "dayjs";
+// import he from "he";
 import SmartView from "./smart.js";
-import {TYPES} from "../const.js";
-import {TYPES_WITH_OFFERS, generateDescription} from "../mock/task.js";
+import {TYPES, PLACES} from "../const.js";
+import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
+import {getCurrentDate} from "../utils/points.js";
+import flatpickr from "flatpickr";
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+const BLANK_POINT = {
+  price: `0`,
+  place: ``,
+  dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+  dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+  description: ``,
+  photos: [],
+  type: [`taxi`],
+  offers: TYPES_WITH_OFFERS[`Taxi`].offers,
+  isFavorite: false
+};
 
 const getEventEditTemplate = (data) => {
-  const {description, place, type, dateStart, dateFinish, photos, offers} = data;
+  const {description, place, price, type, dateStart, dateFinish, photos, offers} = data;
+
+  const createPlacesList = () => {
+    return PLACES.map((elem) => {
+      return `<option value="${elem}"></option>`;
+    }).join(``);
+  };
+
   const createPhotoList = () => {
     return photos.map((elem) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
     }).join(``);
   };
 
-  const dateFirst = dayjs(dateStart).format(`DD/MM/YY-hh:mm`);
-  const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-hh:mm`);
+  const dateFirst = dayjs(dateStart).format(`DD/MM/YY-HH:mm`);
+  const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-HH:mm`);
   const photosList = createPhotoList();
+  const isSubmitDisabled = (place === ``);
 
   const getEventTypeList = () => {
     const getTypeItem = (types) => {
@@ -43,11 +67,12 @@ const getEventEditTemplate = (data) => {
       }
       return `<span></span>`;
     };
+
     const getOfferItem = (offersBlocks) => {
       return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" name="event-offer-luggage" checked>
-                    <label class="event__offer-label" for="event-offer-luggage-1">
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
+                    <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, `-`)}">
                         <span class="event__offer-title">${elem.name}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${elem.price}</span>
@@ -76,8 +101,8 @@ const getEventEditTemplate = (data) => {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${place}" list="destination-list-1">
                     <datalist id="destination-list-1">
+                      ${createPlacesList()}
                       <option value="Amsterdam"></option>
-                      <option value="${place}"></option>
                       <option value="Chamonix"></option>
                     </datalist>
                   </div>
@@ -93,10 +118,13 @@ const getEventEditTemplate = (data) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
                   </div>
-                  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
+                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button class="event__rollup-btn" type="button">
+                    <span class="visually-hidden">Open event</span>
+                  </button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">                    
@@ -137,7 +165,7 @@ const getEventEditTemplate = (data) => {
                   </section>
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${description}</p>
+                    <p class="event__destination-description">${isSubmitDisabled ? `` : description}</p>
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
                         ${photosList}
@@ -150,15 +178,23 @@ const getEventEditTemplate = (data) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point) {
+  constructor(point = BLANK_POINT) {
     super();
     this._element = null;
+    this._datepicker = null;
     this._point = point;
     this._data = FormEdit.parsePointToData(point);
     this._clickHandler = this._clickHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._offerCheckedHandler = this._offerCheckedHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._rollUpClickHandler = this._rollUpClickHandler.bind(this);
+    this._dueFirstDateChangeHandler = this._dueFirstDateChangeHandler.bind(this);
+    this._dueSecondtDateChangeHandler = this._dueSecondtDateChangeHandler.bind(this);
     this._setInnerHandlers();
+    this._setDatepicker();
   }
 
   getTemplate() {
@@ -175,11 +211,98 @@ class FormEdit extends SmartView {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
+  /*
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
+  setRollUpClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+  }*/
+
+  _setDatepicker() {
+    if (this._datepicker) {
+      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
+      // которые создает flatpickr при инициализации
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    if (this._data.dateStart) {
+      // flatpickr есть смысл инициализировать только в случае,
+      // если поле выбора даты доступно для заполнения
+      this._datepicker = flatpickr(
+          this.getElement().querySelector(`#event-start-time-1`),
+          {
+            dateFormat: `d/m/y H:i`,
+            defaultDate: this._data.dateStart,
+            onChange: this._dueFirstDateChangeHandler // На событие flatpickr передаём наш колбэк
+          }
+      );
+    }
+
+    if (this._data.dateFinish) {
+      // flatpickr есть смысл инициализировать только в случае,
+      // если поле выбора даты доступно для заполнения
+      this._datepicker = flatpickr(
+          this.getElement().querySelector(`#event-end-time-1`),
+          {
+            dateFormat: `d/m/y H:i`,
+            defaultDate: this._data.dateFinish,
+            onChange: this._dueSecondtDateChangeHandler // На событие flatpickr передаём наш колбэк
+          }
+      );
+    }
+  }
+
+  _dueFirstDateChangeHandler([userDate]) {
+    // По заданию дедлайн у задачи устанавливается без учёта времеми,
+    // но объект даты без времени завести нельзя,
+    // поэтому будем считать срок у всех задач -
+    // это 23:59:59 установленной даты
+    this.updateData({
+      dateStart: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+    });
+  }
+
+  _dueSecondtDateChangeHandler([userDate]) {
+    // По заданию дедлайн у задачи устанавливается без учёта времеми,
+    // но объект даты без времени завести нельзя,
+    // поэтому будем считать срок у всех задач -
+    // это 23:59:59 установленной даты
+
+    this.updateData({
+      dateFinish: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+    });
+  }
+
   _destinationChangeHandler(evt) {
     evt.preventDefault();
+    const city = PLACES.find((elem) => elem === evt.target.value);
+    if (city) {
+      this.updateData({
+        place: city,
+        description: generateDescription()
+      });
+    }
+  }
+
+  _priceChangeHandler(evt) {
+    evt.preventDefault();
     this.updateData({
-      place: evt.target.value,
-      description: generateDescription()
+      price: evt.target.value
+    });
+  }
+
+  _offerCheckedHandler(evt) {
+    const target = evt.target.id.slice(12).replace(/\W/g, ` `);
+    const offers = this._data.offers.slice();
+    const objIndex = offers.findIndex((obj) => obj.name === target);
+    offers[objIndex].isChecked = true;
+    this.updateData({
+      offers
     });
   }
 
@@ -191,6 +314,35 @@ class FormEdit extends SmartView {
     });
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEdit.parseDataToPoint(this._data));
+  }
+
+  _rollUpClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.rollupClick(FormEdit.parseDataToPoint(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
+  setRollUpClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+  }
+
   _setInnerHandlers() {
     this.getElement()
       .querySelector(`.event__input--destination`)
@@ -198,10 +350,22 @@ class FormEdit extends SmartView {
     this.getElement()
       .querySelector(`.event__type-list`)
       .addEventListener(`change`, this._typeChangeHandler);
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`change`, this._priceChangeHandler);
+    if (this.getElement().querySelector(`.event__offer-checkbox`)) {
+      let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
+      array.forEach((element) => {
+        element.addEventListener(`click`, this._offerCheckedHandler);
+      });
+    }
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setRollUpClickHandler(this._callback.rollupClick);
+    this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
@@ -210,10 +374,8 @@ class FormEdit extends SmartView {
   }
 
   static parseDataToPoint(data) {
-    return Object.assign({},
-        data);
+    return Object.assign({}, data);
   }
-
 }
 
 export {FormEdit};
