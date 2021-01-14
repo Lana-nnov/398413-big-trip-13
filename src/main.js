@@ -14,10 +14,24 @@ import TripPresenter from './presenter/trip.js';
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
+import Api from "./api.js";
 
 const points = new Array(LIST_COUNT).fill().map(generatePoint);
 const pointsModel = new PointsModel();
+
+const AUTHORIZATION = `Basic hjlu678kdfRThjYU`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
+const api = new Api(END_POINT, AUTHORIZATION);
+
 pointsModel.setPoints(points);
+
+api.getPoints().then((points) => {
+  console.log(points);
+  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
+  // а ещё на сервере используется snake_case, а у нас camelCase.
+  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
+  // Есть вариант получше - паттерн "Адаптер"
+});
 
 // HEADER
 const mainContainer = document.querySelector(`.trip-main`);
