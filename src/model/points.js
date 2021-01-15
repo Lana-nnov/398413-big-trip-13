@@ -6,11 +6,18 @@ export default class Points extends Observer {
     this._points = [];
   }
 
-  setPoints(points) {
+  /* setPoints(points) {
     this._points = points.slice();
+    console.log(this._points)
+  } */
+
+  setPoints(updateType, points) {
+    this._points = points.slice();
+    this._notify(updateType);
   }
 
   getPoints() {
+    console.log(this._points)
     return this._points;
   }
 
@@ -55,7 +62,7 @@ export default class Points extends Observer {
   }
 
   static adaptToClient(point) {
-    const adaptedTask = Object.assign(
+    const adaptedPoint = Object.assign(
         {},
         point,
         {
@@ -78,11 +85,11 @@ export default class Points extends Observer {
     delete adaptedPoint.destination.pictures;
     delete adaptedPoint.is_favorite;
 
-    return adaptePoint;
+    return adaptedPoint;
   }
 
   static adaptToServer(point) {
-    const adaptedTask = Object.assign(
+    const adaptedPoint = Object.assign(
         {},
         point,
         {

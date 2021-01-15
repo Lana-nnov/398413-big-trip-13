@@ -14,30 +14,29 @@ import TripPresenter from './presenter/trip.js';
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
+import {UpdateType} from "./const.js";
 import Api from "./api.js";
 
-const points = new Array(LIST_COUNT).fill().map(generatePoint);
+// const points = new Array(LIST_COUNT).fill().map(generatePoint);
 const pointsModel = new PointsModel();
 
 const AUTHORIZATION = `Basic hjlu678kdfRThjYU`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const api = new Api(END_POINT, AUTHORIZATION);
 
-pointsModel.setPoints(points);
+// pointsModel.setPoints(points);
 
-api.getPoints().then((points) => {
-  console.log(points);
-  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-  // а ещё на сервере используется snake_case, а у нас camelCase.
-  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-  // Есть вариант получше - паттерн "Адаптер"
-});
+api.getPoints()
+  .then((points) => {
+    pointsModel.setPoints(UpdateType.INIT, points);
+  });
+  
 
 // HEADER
 const mainContainer = document.querySelector(`.trip-main`);
 render(mainContainer, new HeaderInfoTemplate(), RenderPosition.AFTERBEGIN);
 const headerContainer = document.querySelector(`.trip-info`);
-render(mainContainer, new InfoDestination(points), RenderPosition.AFTERBEGIN);
+// render(mainContainer, new InfoDestination(points), RenderPosition.AFTERBEGIN);
 render(headerContainer, new InfoPrice(), RenderPosition.BEFOREEND);
 
 //MENU
@@ -46,23 +45,18 @@ render(mainContainer, new MenuControls(), RenderPosition.BEFOREEND);
 const menuContainer = document.querySelector(`.trip-controls`);
 render(menuContainer, new MenuTabs(), RenderPosition.AFTERBEGIN);
 
-//render(menuContainer, new MenuFilters(filters, `all`), RenderPosition.BEFOREEND);
-//render(menuContainer, new MenuFilters(), RenderPosition.BEFOREEND);
-
 //MAIN (forms)
 const eventsContainer = document.querySelector(`.trip-events`); 
 render(eventsContainer, new List(), RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(eventsContainer, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(menuContainer, filterModel, pointsModel);
-//const tripPresenter = new TripPresenter(eventsContainer);
-//tripPresenter.init(points);
 tripPresenter.init();
-filterPresenter.init();
+// filterPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+/*document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
     evt.preventDefault();
     tripPresenter.createPoint();
-  });
+  });*/
 
 
 

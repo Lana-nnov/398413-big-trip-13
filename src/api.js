@@ -16,12 +16,14 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  getPoints() {
+  getPoints() {    
     return this._load({url: `points`})
-      .then(Api.toJSON);
+      .then(Api.toJSON)
+      .then((points) => points.map(PointsModel.adaptToClient));
   }
 
   updatePoint(point) {
+    console.log(99)
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,

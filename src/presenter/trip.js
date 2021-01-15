@@ -99,6 +99,12 @@ export default class Trip {
         this._clearTrip({resetSortType: true});
         this._renderBoard();
         break;
+      case UpdateType.INIT:
+        console.log(`INIT`)
+        // this._isLoading = false;
+        // remove(this._loadingComponent);
+        this._renderBoard();
+        break;  
     }
   }
 

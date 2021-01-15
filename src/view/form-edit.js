@@ -21,8 +21,9 @@ const BLANK_POINT = {
 
 const getEventEditTemplate = (data) => {
   const {description, place, price, type, dateStart, dateFinish, photos, offers} = data;
+  console.log(data)
 
-  const createPlacesList = () => {
+  const createPlacesList = () => {    
     return PLACES.map((elem) => {
       return `<option value="${elem}"></option>`;
     }).join(``);
@@ -30,7 +31,7 @@ const getEventEditTemplate = (data) => {
 
   const createPhotoList = () => {
     return photos.map((elem) => {
-      return `<img class="event__photo" src="${elem}" alt="Event photo">`;
+      return `<img class="event__photo" src="${elem.src}" alt=""${elem.description}">`;
     }).join(``);
   };
 
@@ -96,14 +97,11 @@ const getEventEditTemplate = (data) => {
                     ${getEventTypeList()}
                   </div>
                   <div class="event__field-group  event__field-group--destination">
-                    <label class="event__label  event__type-output" for="event-destination-1">
-                      ${type}
+                    <label class="event__label  event__type-output" for="event-destination-1">                     
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${place}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${createPlacesList()}
-                      <option value="Amsterdam"></option>
-                      <option value="Chamonix"></option>
                     </datalist>
                   </div>
                   <div class="event__field-group  event__field-group--time">
@@ -128,7 +126,10 @@ const getEventEditTemplate = (data) => {
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">                    
-                    ${getOffersList()}
+                    
+
+
+
                       <!--<div class="event__offer-selector">
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
                         <label class="event__offer-label" for="event-offer-comfort-1">
