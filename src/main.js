@@ -6,8 +6,8 @@ import {MenuTabs} from "./view/menu-tabs";
 import {List} from "./view/list-all.js";
 import {MenuFilters} from "./view/menu-filters";
 import {FormSort} from "./view/form-sort";
-import {generatePoint} from "./mock/point.js";
-import {LIST_COUNT} from "./const.js";
+// import {generatePoint} from "./mock/point.js";
+// import {LIST_COUNT} from "./const.js";
 import {THIRD_POINT} from "./const.js";
 import {render, RenderPosition} from "./utils/render.js";
 import TripPresenter from './presenter/trip.js';
@@ -15,6 +15,7 @@ import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
 import {UpdateType} from "./const.js";
+import {generateId} from "./utils/points.js";
 import Api from "./api.js";
 
 // const points = new Array(LIST_COUNT).fill().map(generatePoint);
@@ -25,12 +26,6 @@ const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 const api = new Api(END_POINT, AUTHORIZATION);
 
 // pointsModel.setPoints(points);
-
-api.getPoints()
-  .then((points) => {
-    pointsModel.setPoints(UpdateType.INIT, points);
-  });
-  
 
 // HEADER
 const mainContainer = document.querySelector(`.trip-main`);
@@ -53,11 +48,25 @@ const filterPresenter = new FilterPresenter(menuContainer, filterModel, pointsMo
 tripPresenter.init();
 // filterPresenter.init();
 
-/*document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    tripPresenter.createPoint();
-  });*/
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint();
+});  
 
+Promise
+.all([
+  api.getPoints(),
+  api.getDestinations(),
+  api.getOffers()
+])
+.then(([points, destinations, offers]) => {
+  console.log(destinations);
+  //pointsModel.setDestinations(destinations);
+  console.log(points);
+  pointsModel.setDestinations(destinations);
+  console.log(offers)
+  pointsModel.setOffers(offers);
+  pointsModel.setPoints(UpdateType.INIT, points);
+})
 
-
-
+  

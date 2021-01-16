@@ -19,15 +19,15 @@ const BLANK_POINT = {
   isFavorite: false
 };
 
-const getEventEditTemplate = (data) => {
-  const {description, place, price, type, dateStart, dateFinish, photos, offers} = data;
-  console.log(data)
+const getEventEditTemplate = (data, destinations, offers) => {
+  const {description, place, price, type, dateStart, dateFinish, photos} = data;
+  console.log(Object.values(offers))
 
-  const createPlacesList = () => {    
-    return PLACES.map((elem) => {
-      return `<option value="${elem}"></option>`;
+  const createPlacesList = () => {
+    return destinations.map((elem) => {
+      return `<option value="${elem.name}"></option>`;
     }).join(``);
-  };
+  }
 
   const createPhotoList = () => {
     return photos.map((elem) => {
@@ -63,7 +63,7 @@ const getEventEditTemplate = (data) => {
 
   const getOffersList = () => {
     const getOfferTitle = (offersItems) => {
-      if (offersItems.length > 0) {
+      if (offersItems.offers.length > 0) {
         return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
       }
       return `<span></span>`;
@@ -72,9 +72,9 @@ const getEventEditTemplate = (data) => {
     const getOfferItem = (offersBlocks) => {
       return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.name.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
-                    <label class="event__offer-label" for="event-offer-${elem.name.replace(/ /g, `-`)}">
-                        <span class="event__offer-title">${elem.name}</span>
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
+                    <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
+                        <span class="event__offer-title">${elem.title}</span>
                         &plus;&euro;&nbsp;
                         <span class="event__offer-price">${elem.price}</span>
                   </label>
@@ -179,11 +179,13 @@ const getEventEditTemplate = (data) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point = BLANK_POINT) {
+  constructor(point = BLANK_POINT, destinations, offers) {
     super();
     this._element = null;
     this._datepicker = null;
     this._point = point;
+    this._destinations = destinations;
+    this._offers = offers;
     this._data = FormEdit.parsePointToData(point);
     this._clickHandler = this._clickHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
@@ -199,7 +201,7 @@ class FormEdit extends SmartView {
   }
 
   getTemplate() {
-    return getEventEditTemplate(this._data);
+    return getEventEditTemplate(this._data, this._destinations, this._offers);
   }
 
   _clickHandler(evt) {
@@ -281,11 +283,12 @@ class FormEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const city = PLACES.find((elem) => elem === evt.target.value);
-    if (city) {
+    const cityObject = this._destinations.find((elem) => elem.name === evt.target.value);
+    if (cityObject) {
       this.updateData({
-        place: city,
-        description: generateDescription()
+        place: cityObject.name,
+        description: cityObject.description,
+        photos: cityObject.pictures
       });
     }
   }

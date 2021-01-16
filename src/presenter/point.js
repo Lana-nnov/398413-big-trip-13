@@ -27,13 +27,15 @@ export default class Point {
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
   }
 
-  init(point) {
+  init(point, destinations, offers) {
     this._point = point;
+    this._destinations = destinations;
+    this._offers = offers;
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new ListPoint(point);
-    this._pointEditComponent = new FormEdit(point);
+    this._pointEditComponent = new FormEdit(point, destinations, offers);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);

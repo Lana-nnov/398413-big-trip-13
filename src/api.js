@@ -22,12 +22,21 @@ export default class Api {
       .then((points) => points.map(PointsModel.adaptToClient));
   }
 
+  getDestinations() {
+    return this._load({url: `destinations`})
+      .then(Api.toJSON); 
+  }
+
+  getOffers() {
+    return this._load({url: `offers`})
+      .then(Api.toJSON); 
+  }
+
   updatePoint(point) {
-    console.log(99)
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify((PointsModel.adaptToServer(point))), //// ADD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      body: JSON.stringify((PointsModel.adaptToServer(point))),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
@@ -61,7 +70,7 @@ export default class Api {
     return response;
   }
 
-  static toJSON(response) {
+  static toJSON(response) {    
     return response.json();
   }
 

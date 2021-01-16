@@ -5,6 +5,7 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
 import {sortPointTime, sortPointPrice} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
+import LoadingView from "../view/loading.js";
 
 export default class Trip {
   constructor(tripContainer, pointModel, filterModel) {
@@ -14,6 +15,8 @@ export default class Trip {
     this._sortComponent = new FormSort();
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
+    this._isLoading = true;
+    this._loadingComponent = new LoadingView();
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -33,6 +36,16 @@ export default class Trip {
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init();
   }
+
+  //__________________________________________________________________________
+
+  _getDestinations() {
+    return this._pointModel.getDestinations();
+  }
+  
+  _getOffers() {
+    return this._pointModel.getOffers();
+  }  
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
@@ -55,7 +68,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     remove(this._sortComponent);
-    // remove(this._noPointComponent);
+      remove(this._noPointComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -87,9 +100,9 @@ export default class Trip {
   }
 
   _handleModelEvent(updateType, data) {
-    switch (updateType) {
+    switch (updateType) {      
       case UpdateType.PATCH:
-        this._pointPresenter[data.id].init(data);
+        this._pointPresenter[data.id].init(data, this._getDestinations());
         break;
       case UpdateType.MINOR:
         this._clearTrip();
@@ -100,9 +113,8 @@ export default class Trip {
         this._renderBoard();
         break;
       case UpdateType.INIT:
-        console.log(`INIT`)
-        // this._isLoading = false;
-        // remove(this._loadingComponent);
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderBoard();
         break;  
     }
@@ -119,25 +131,24 @@ export default class Trip {
     render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderPoint(point) {
-    // const pointPresenter = new Point(this._listComponent, this._handleViewAction, this._handleModeChange);
-    const pointPresenter = new Point(this._tripContainer.querySelector(`.trip-events__list`), this._handleViewAction, this._handleModeChange);
-    pointPresenter.init(point);
+  _renderPoint(point, destinations, offers) {
+    // const pointPresenter = new Point(this._listComponent, this._handleViewAction, this._handleModeChange);    
+    const pointPresenter = new Point(this._tripContainer.querySelector(`.trip-events__list`), this._handleViewAction, this._handleModeChange);    
+    pointPresenter.init(point, destinations, offers);
     this._pointPresenter[point.id] = pointPresenter;
   }
 
-  _renderPoints(points) {
-    points.slice().forEach((point) => this._renderPoint(point));
-  }
-
-  /* _renderPointsList() {
-    render(this._tripContainer, this._listComponent, RenderPosition.BEFOREEND);
-    const points = this._getPoints().slice();
-    this._renderPoints(points);
-  }*/
+  _renderPoints(points, destinations, offers) {
+    //points.slice().forEach((point) => this._renderPoint(point, destinations));
+    points.forEach((point) => this._renderPoint(point, destinations, offers));
+  } 
 
   _renderNoPoints() {
     // Метод для рендеринга заглушки
+  }
+
+  _renderLoading() {
+    render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _handleModeChange() {
@@ -147,8 +158,17 @@ export default class Trip {
   }
 
   _renderBoard() {
-    const points = this._getPoints();
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
+    const points = this._getPoints();    
+    const destinations = this._getDestinations();
+    const offers = this._getOffers();
     const pointCount = points.length;
+
+    console.log(offers)
 
     if (pointCount === 0) {
       this._renderNoPoints();
@@ -156,7 +176,7 @@ export default class Trip {
     }
 
     this._renderSort();
-    this._renderPoints(points);
+    this._renderPoints(points, destinations, offers);
     // this._renderPointsList();
   }
 }

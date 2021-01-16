@@ -4,20 +4,36 @@ export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
+    this._destinations = [];
+    this._offers = [];
   }
-
-  /* setPoints(points) {
-    this._points = points.slice();
-    console.log(this._points)
-  } */
 
   setPoints(updateType, points) {
     this._points = points.slice();
     this._notify(updateType);
   }
 
+  // _____________________________________________
+
+  setDestinations(destinations) { 
+    this._destinations = destinations.slice();
+  }
+
+  getDestinations() {
+    return this._destinations;
+  }
+
+  setOffers(offers) { 
+    this._offers = offers.slice();
+  }
+
+  getOffers() {
+    return this._offers;
+  }
+  
+  //___________________________
+
   getPoints() {
-    console.log(this._points)
     return this._points;
   }
 
@@ -96,6 +112,11 @@ export default class Points extends Observer {
           "base_price": point.price,
           "date_from": point.dateStart instanceof Date ? point.dateStart.toISOString() : null,
           "date_to": point.dateFinish instanceof Date ? point.dateFinish.toISOString() : null,
+          'destination': {
+            description: point.description,
+            name: point.place,
+            pictures: point.photos,
+          },
            "is_favorite": point.isFavorite          
         }
     );
@@ -105,6 +126,9 @@ export default class Points extends Observer {
     delete adaptedPoint.dateStart;
     delete adaptedPoint.dateFinish;
     delete adaptedPoint.isFavorite;
+    delete adaptedPoint.place;
+    delete adaptedPoint.description;
+    delete adaptedPoint.photos;
 
     return adaptedPoint;
   }

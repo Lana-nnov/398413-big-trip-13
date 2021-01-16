@@ -32,3 +32,5 @@ export const isDateFuture = (date) => {
   return false;
 };
 
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
