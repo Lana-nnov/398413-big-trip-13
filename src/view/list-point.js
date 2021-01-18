@@ -35,9 +35,11 @@ const getListPoint = (point) => {
   }; */
 
   const getFirstOffer = (offersList) => {
+    console.log(offersList)
     const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));
+    console.log(objIndex)
     if (offersList.length !== 0 && objIndex >= 0) {
-      return `<span class="event__offer-title">${offers[objIndex][`name`]}</span>
+      return `<span class="event__offer-title">${offers[objIndex][`title`]}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offers[objIndex][`price`]}</span>`;
     }
@@ -65,7 +67,7 @@ const getListPoint = (point) => {
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
                   <li class="event__offer">
-                    ${getFirstOffer(Object.values(offers))}
+                    ${getFirstOffer(offers)}
                   </li>
                 </ul>
                 <button class="event__favorite-btn ${favoriteClassName}" type="button">

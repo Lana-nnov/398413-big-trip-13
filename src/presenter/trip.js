@@ -31,7 +31,7 @@ export default class Trip {
     this._renderBoard();
   }
 
-  createPoint() {
+  createPoint() {    
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init();
@@ -68,7 +68,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     remove(this._sortComponent);
-      remove(this._noPointComponent);
+      // remove(this._noPointComponent); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -102,7 +102,7 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     switch (updateType) {      
       case UpdateType.PATCH:
-        this._pointPresenter[data.id].init(data, this._getDestinations());
+        this._pointPresenter[data.id].init(data, this._getDestinations(), this._getOffers());
         break;
       case UpdateType.MINOR:
         this._clearTrip();
@@ -140,7 +140,7 @@ export default class Trip {
 
   _renderPoints(points, destinations, offers) {
     //points.slice().forEach((point) => this._renderPoint(point, destinations));
-    points.forEach((point) => this._renderPoint(point, destinations, offers));
+    points.slice().forEach((point) => this._renderPoint(point, destinations, offers));
   } 
 
   _renderNoPoints() {
