@@ -52,6 +52,12 @@ export const FilterType = {
   PAST: `past`
 };
 
+export const MenuItem = {
+  ADD_NEW_POINT: `ADD_NEW_POINT`,
+  TABLE: `TABLE`,
+  STATS: `STATS`
+};
+
 export const FHOTOS_COUNT = 5;
 export const LIST_COUNT = 10;
 export const THIRD_POINT = 2;

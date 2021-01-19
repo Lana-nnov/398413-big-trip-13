@@ -1,9 +1,11 @@
 import dayjs from "dayjs";
 import AbstractView from "./abstract.js";
 import {THIRD_POINT} from "../const.js";
+import {reducer} from "../utils/points.js";
 
-const getInfoDestination = (points) => {
+const getInfoDestination = (points) => { 
   const places = points.map(({place}) => place);
+  const prices = points.map(({price}) => +price);
   const dateFirst = dayjs(points[0].dateStart).format(`MMM DD`);
   const dateSecond = dayjs(points[THIRD_POINT].dateFinish).format(`MMM DD`);
 
@@ -15,12 +17,21 @@ const getInfoDestination = (points) => {
     }).slice(0, MAIN_COUNT_POINTS).join(` `);
   };
 
-  const tripPoints = createHeaderInfo();
+  const createHeaderPriceInfo = () => {
+    return prices.reduce(reducer);
+  } 
 
-  return `<div class="trip-info__main">
+  const tripPoints = createHeaderInfo();
+  const tripPrice = createHeaderPriceInfo();
+
+  return `<section class="trip-main__trip-info  trip-info"><div class="trip-info__main">
               <h1 class="trip-info__title">${tripPoints}</h1>
               <p class="trip-info__dates">${dateFirst}&nbsp;&mdash;&nbsp;${dateSecond}</p>
-            </div>`;
+            </div>
+            <p class="trip-info__cost">
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${tripPrice}</span>
+            </p>
+            </section>`;
 };
 
 class InfoDestination extends AbstractView {

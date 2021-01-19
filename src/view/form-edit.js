@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 // import {TYPES, PLACES} from "../const.js";
 // import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
-import {getCurrentDate, capitalize} from "../utils/points.js";
+import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -19,7 +19,7 @@ const BLANK_POINT = {
   isFavorite: false
 };
 
-const TYPES = [];
+const types = [];
 
 const getEventEditTemplate = (data, destinations, offersArray) => {
   const {description, place, price, type, dateStart, offers, dateFinish, photos} = data; 
@@ -57,13 +57,13 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 
   const createTypesList = () => {
     return offersArray.map((elem) => {
-      TYPES.push(elem.type)
+      types.push(elem.type)
     })  
   }
 
   const getEventTypeList = () => {
     createTypesList();   
-    const mySetTypes = new Set (TYPES);  
+    const mySetTypes = new Set (types);  
     const typesArray = Array.from(mySetTypes);
     const getTypeItem = (typesArray) => {
       return typesArray.map((typeItem) => {
@@ -168,13 +168,42 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point = BLANK_POINT, destinations, offers) {
+  constructor(point, destinations, offers) {    
     super();
     this._element = null;
     this._datepicker = null;
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
+
+    /*if (point === false) {
+      point = {
+        price: `0`,
+        place: ``,
+        dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+        dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+        description: ``,
+        photos: [],
+        type: [`taxi`],
+        offers: [],
+        isFavorite: false
+      };
+    }*/
+    
+    if (point === undefined) {
+      point = {
+        price: `0`,
+        place: ``,
+        dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+        dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+        description: ``,
+        photos: [],
+        type: [`taxi`],
+        offers: [],
+        isFavorite: false
+      };
+    }
+
     this._data = FormEdit.parsePointToData(point);
     this._clickHandler = this._clickHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
@@ -290,12 +319,10 @@ class FormEdit extends SmartView {
   }  
 
   _offerCheckedHandler(evt) {
-    console.log(99)
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._data.offers.slice();
     const objIndex = offers.findIndex((obj) => obj.title === target);    
     offers[objIndex].isChecked = true;
-    console.log(offers)
     this.updateData({
       offers
     });

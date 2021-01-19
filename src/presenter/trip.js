@@ -1,4 +1,5 @@
 import {FormSort} from "../view/form-sort.js";
+import {InfoDestination} from "../view/header-info";
 import Point from './point.js';
 import PointNewPresenter from './new-point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
@@ -27,17 +28,15 @@ export default class Trip {
     this._pointNewPresenter = new PointNewPresenter(tripContainer.querySelector(`.trip-events__list`), this._handleViewAction);
   }
 
-  init() {
-    this._renderBoard();
+  init() {    
+    this._renderBoard();   
   }
 
-  createPoint() {    
+  createPoint(callback) {    
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init();
+    this._pointNewPresenter.init(callback, this._getDestinations(), this._getOffers());
   }
-
-  //__________________________________________________________________________
 
   _getDestinations() {
     return this._pointModel.getDestinations();
@@ -68,6 +67,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     remove(this._sortComponent);
+    remove(this._tripInformationBlock);
       // remove(this._noPointComponent); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 
     if (resetSortType) {
@@ -99,6 +99,12 @@ export default class Trip {
     }
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _handleModelEvent(updateType, data) {
     switch (updateType) {      
       case UpdateType.PATCH:
@@ -128,7 +134,7 @@ export default class Trip {
     this._sortComponent = new FormSort(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    render(this._tripContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._tripContainer.querySelector(`.trip-events`), this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderPoint(point, destinations, offers) {
@@ -138,8 +144,7 @@ export default class Trip {
     this._pointPresenter[point.id] = pointPresenter;
   }
 
-  _renderPoints(points, destinations, offers) {
-    //points.slice().forEach((point) => this._renderPoint(point, destinations));
+  _renderPoints(points, destinations, offers) {    
     points.slice().forEach((point) => this._renderPoint(point, destinations, offers));
   } 
 
@@ -149,12 +154,14 @@ export default class Trip {
 
   _renderLoading() {
     render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
-  }
+  }  
 
-  _handleModeChange() {
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter.resetView());
+  _renderTripInformation(points) {
+    if (this._tripInformationBlock !== null) {
+      this._tripInformationBlock = null;
+    }
+    this._tripInformationBlock = new InfoDestination(points);
+    render(this._tripContainer.querySelector('.trip-main'), this._tripInformationBlock, RenderPosition.AFTERBEGIN);
   }
 
   _renderBoard() {
@@ -168,15 +175,17 @@ export default class Trip {
     const offers = this._getOffers();
     const pointCount = points.length;
 
-    console.log(offers)
-
     if (pointCount === 0) {
       this._renderNoPoints();
       return;
-    }
+    }    
 
     this._renderSort();
     this._renderPoints(points, destinations, offers);
+
+    if (pointCount !== 0) {
+      this._renderTripInformation(points);
+    }
     // this._renderPointsList();
   }
 }

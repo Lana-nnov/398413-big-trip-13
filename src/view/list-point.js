@@ -35,9 +35,7 @@ const getListPoint = (point) => {
   }; */
 
   const getFirstOffer = (offersList) => {
-    console.log(offersList)
     const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));
-    console.log(objIndex)
     if (offersList.length !== 0 && objIndex >= 0) {
       return `<span class="event__offer-title">${offers[objIndex][`title`]}</span>
         &plus;&euro;&nbsp;
