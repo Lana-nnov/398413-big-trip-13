@@ -31,13 +31,6 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
   };
 
   const createOffersList = () => {
-    const getOfferTitle = (offersItems) => {
-      if (offersItems.length > 0) {
-        return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
-      }
-      return `<span></span>`;
-    };
-    
     return offers.map((elem) => {
       return `<div class="event__available-offers">
       <div class="event__offer-selector">
@@ -49,7 +42,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
           <span class="event__offer-price">${elem.price}</span>
         </label>
       </div>`;
-      }).join(``);      
+    }).join(``);
   };
 
   const createPhotoList = () => {
@@ -66,8 +59,8 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
   const createTypesList = () => {
     return offersArray.map((elem) => {
       types.push(elem.type);
-    });  
-  }
+    });
+  };
 
   const getEventTypeList = () => {
     createTypesList();
@@ -114,8 +107,8 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
       }).join(``);
     }; */
 
-    // return `${getOfferTitle(offers)}<div class="event__available-offers">${getOfferItem(Object.values(offers))}</div>`;
-    /* return `<div class="event__available-offers">${createOffersTitle(offers)}</div>`;
+  // return `${getOfferTitle(offers)}<div class="event__available-offers">${getOfferItem(Object.values(offers))}</div>`;
+  /* return `<div class="event__available-offers">${createOffersTitle(offers)}</div>`;
   };*/
 
   return `<li class="trip-events__item">
