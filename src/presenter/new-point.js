@@ -15,11 +15,11 @@ export default class PointNew {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-   
+
   }
 
   init(callback, destinations, offers) {
-    this._point;
+    this._point = null;
     this._destroyCallback = callback;
     if (this._pointEditComponent !== null) {
       return;
@@ -35,7 +35,7 @@ export default class PointNew {
     this._pointListContainer.querySelector(`.event__rollup-btn`).style.display = `none`;
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
-  }  
+  }
 
   destroy() {
     if (this._destroyCallback !== null) {

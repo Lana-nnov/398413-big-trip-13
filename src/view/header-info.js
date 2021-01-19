@@ -3,7 +3,7 @@ import AbstractView from "./abstract.js";
 import {THIRD_POINT} from "../const.js";
 import {reducer} from "../utils/points.js";
 
-const getInfoDestination = (points) => { 
+const getInfoDestination = (points) => {
   const places = points.map(({place}) => place);
   const prices = points.map(({price}) => +price);
   const dateFirst = dayjs(points[0].dateStart).format(`MMM DD`);
@@ -19,7 +19,7 @@ const getInfoDestination = (points) => {
 
   const createHeaderPriceInfo = () => {
     return prices.reduce(reducer);
-  } 
+  };
 
   const tripPoints = createHeaderInfo();
   const tripPrice = createHeaderPriceInfo();

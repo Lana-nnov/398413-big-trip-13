@@ -7,7 +7,7 @@ import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const BLANK_POINT = {
+/* const BLANK_POINT = {
   price: `0`,
   place: ``,
   dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
@@ -17,20 +17,27 @@ const BLANK_POINT = {
   type: [`taxi`],
   offers: [],
   isFavorite: false
-};
+}; */
 
 const types = [];
 
 const getEventEditTemplate = (data, destinations, offersArray) => {
-  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data; 
+  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
       return `<option value="${elem.name}"></option>`;
     }).join(``);
-  }  
-  
+  };
+
   const createOffersList = () => {
+    const getOfferTitle = (offersItems) => {
+      if (offersItems.length > 0) {
+        return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
+      }
+      return `<span></span>`;
+    };
+    
     return offers.map((elem) => {
       return `<div class="event__available-offers">
       <div class="event__offer-selector">
@@ -41,8 +48,9 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${elem.price}</span>
         </label>
-      </div>`}).join(``);   
-  }
+      </div>`;
+      }).join(``);      
+  };
 
   const createPhotoList = () => {
     return photos.map((elem) => {
@@ -57,16 +65,16 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 
   const createTypesList = () => {
     return offersArray.map((elem) => {
-      types.push(elem.type)
-    })  
+      types.push(elem.type);
+    });  
   }
 
   const getEventTypeList = () => {
-    createTypesList();   
-    const mySetTypes = new Set (types);  
+    createTypesList();
+    const mySetTypes = new Set(types);
     const typesArray = Array.from(mySetTypes);
-    const getTypeItem = (typesArray) => {
-      return typesArray.map((typeItem) => {
+    const getTypeItem = (array) => {
+      return array.map((typeItem) => {
         const typeInLowerCase = typeItem.toLowerCase();
         return `<div class="event__type-item">
             <input id="event-type-${typeInLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeInLowerCase}"
@@ -85,15 +93,15 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
       </div>`;
   };
 
-  const getOffersList = () => {
-    const getOfferTitle = (offersItems) => {
+  /* const getOffersTitle = () => {
+    const createOffersTitle = (offersItems) => {
       if (offersItems.offers.length > 0) {
         return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
       }
       return `<span></span>`;
     };
 
-    /*const getOfferItem = (offersBlocks) => {
+    /* const getOfferItem = (offersBlocks) => {
       return offersBlocks.map((elem) => {
         return `<div class="event__offer-selector">
                   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
@@ -104,11 +112,11 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                   </label>
                 </div>`;
       }).join(``);
-    };*/   
- 
+    }; */
+
     // return `${getOfferTitle(offers)}<div class="event__available-offers">${getOfferItem(Object.values(offers))}</div>`;
-    return `<div class="event__available-offers">${getOfferItem(offers)}</div>`;
-  };
+    /* return `<div class="event__available-offers">${createOffersTitle(offers)}</div>`;
+  };*/
 
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -150,7 +158,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                   </button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">                    
+                  <section class="event__section  event__section--offers">
                   ${createOffersList()}
                   </section>
                   <section class="event__section  event__section--destination">
@@ -168,7 +176,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point, destinations, offers) {    
+  constructor(point, destinations, offers) {
     super();
     this._element = null;
     this._datepicker = null;
@@ -176,7 +184,7 @@ class FormEdit extends SmartView {
     this._destinations = destinations;
     this._offers = offers;
 
-    /*if (point === false) {
+    /* if (point === false) {
       point = {
         price: `0`,
         place: ``,
@@ -189,8 +197,8 @@ class FormEdit extends SmartView {
         isFavorite: false
       };
     }*/
-    
-    if (point === undefined) {
+
+    if (point === null) {
       point = {
         price: `0`,
         place: ``,
@@ -316,12 +324,12 @@ class FormEdit extends SmartView {
     this.updateData({
       price: evt.target.value
     });
-  }  
+  }
 
   _offerCheckedHandler(evt) {
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._data.offers.slice();
-    const objIndex = offers.findIndex((obj) => obj.title === target);    
+    const objIndex = offers.findIndex((obj) => obj.title === target);
     offers[objIndex].isChecked = true;
     this.updateData({
       offers
@@ -330,13 +338,13 @@ class FormEdit extends SmartView {
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
-    const offerObject = this._offers.slice().find((elem) => elem.type === evt.target.value);   
-    const offers = offerObject.offers
+    const offerObject = this._offers.slice().find((elem) => elem.type === evt.target.value);
+    const offers = offerObject.offers;
     this.updateData({
       type: evt.target.value,
-      //offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
+      // offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
       offers
-    }); 
+    });
   }
 
   removeElement() {

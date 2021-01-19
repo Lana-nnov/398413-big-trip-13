@@ -15,7 +15,7 @@ export default class Points extends Observer {
 
   // _____________________________________________
 
-  setDestinations(destinations) { 
+  setDestinations(destinations) {
     this._destinations = destinations.slice();
   }
 
@@ -23,15 +23,15 @@ export default class Points extends Observer {
     return this._destinations;
   }
 
-  setOffers(offers) { 
+  setOffers(offers) {
     this._offers = offers.slice();
   }
 
   getOffers() {
     return this._offers;
   }
-  
-  //___________________________
+
+  // ___________________________
 
   getPoints() {
     return this._points;
@@ -87,7 +87,7 @@ export default class Points extends Observer {
           dateStart: point.date_from !== null ? new Date(point.date_from) : point.date_from,
           dateFinish: point.date_to !== null ? new Date(point.date_to) : point.date_to,
           description: point.destination.description,
-          photos: point.destination.pictures,    
+          photos: point.destination.pictures,
           isFavorite: point.is_favorite
         }
     );
@@ -117,7 +117,7 @@ export default class Points extends Observer {
             name: point.place,
             pictures: point.photos,
           },
-           "is_favorite": point.isFavorite          
+          "is_favorite": point.isFavorite
         }
     );
 

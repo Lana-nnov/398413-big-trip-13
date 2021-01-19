@@ -32,11 +32,6 @@ export const isDateFuture = (date) => {
   return false;
 };
 
-export const capitalize = (s) =>
-{
-    return s[0].toUpperCase() + s.slice(1);
-}
-
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 export const reducer = (accumulator, currentValue) => accumulator + currentValue;

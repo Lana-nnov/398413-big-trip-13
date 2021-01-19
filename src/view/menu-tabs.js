@@ -32,7 +32,7 @@ class MenuTabs extends AbstractView {
     return getMenuTabs();
   }
 
-  _menuClickHandler(evt) {
+  _menuClickHandler() {
     // console.log(evt.target.value);
   }
 
@@ -47,7 +47,7 @@ class MenuTabs extends AbstractView {
     if (item !== null) {
       item.classList.add(`trip-tabs__btn--active`);
     }
-  }  
+  }
 }
 
 export {MenuTabs};
