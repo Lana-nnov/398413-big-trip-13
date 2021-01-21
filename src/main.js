@@ -48,7 +48,6 @@ const handlePointNewFormClose = () => {
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
-      debugger
       tripPresenter.createPoint(handlePointNewFormClose);
       siteMenuComponent.getElement().querySelector(`[data-header-type=${MenuItem.TABLE}]`)
       .classList.remove(`trip-tabs__btn--active`);

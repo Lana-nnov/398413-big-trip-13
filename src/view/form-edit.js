@@ -10,7 +10,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 /* const BLANK_POINT = {
   price: `0`,
   place: ``,
-  dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+  dateStart: dayjs(getCurrentDate()).toISOString(),
   dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
   description: ``,
   photos: [],
@@ -22,7 +22,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const types = [];
 
 const getEventEditTemplate = (data, destinations, offersArray) => {
-  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;
+  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;  
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -195,8 +195,8 @@ class FormEdit extends SmartView {
       point = {
         price: `0`,
         place: ``,
-        dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
-        dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
+        dateStart: dayjs(getCurrentDate()).toISOString(),
+        dateFinish: dayjs(getCurrentDate()).toISOString(),
         description: ``,
         photos: [],
         type: [`taxi`],
@@ -400,6 +400,7 @@ class FormEdit extends SmartView {
   }
 
   static parseDataToPoint(data) {
+    console.log(new Date(data.dateStart))
     return Object.assign({}, data);
   }
 }
