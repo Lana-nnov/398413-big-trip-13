@@ -4,17 +4,18 @@
 // import {MenuControls} from "./view/menu-controls";
 import {MenuTabs} from "./view/menu-tabs";
 import {List} from "./view/list-all.js";
+import StatisticsView from "./view/statistics.js";
 // import {MenuFilters} from "./view/menu-filters";
 // import {FormSort} from "./view/form-sort";
 // import {generatePoint} from "./mock/point.js";
 // import {LIST_COUNT} from "./const.js";
 // import {THIRD_POINT} from "./const.js";
-import {render, RenderPosition} from "./utils/render.js";
+import {render, RenderPosition, remove} from "./utils/render.js";
 import TripPresenter from './presenter/trip.js';
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
-import {UpdateType} from "./const.js";
+import {UpdateType, FilterType} from "./const.js";
 // import {generateId} from "./utils/points.js";
 import {MenuItem} from "./const.js";
 import Api from "./api.js";
@@ -40,25 +41,48 @@ const mainContainer = document.querySelector(`.page-body`);
 
 
 const handlePointNewFormClose = () => {  
-  siteMenuComponent.getElement().querySelector(`[data-header-type=${MenuItem.TABLE}]`)
+  siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
   .classList.add(`trip-tabs__btn--active`);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
 };
 
+let statisticsComponent = null;
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
+      tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripPresenter.init();
+      remove(statisticsComponent);
       tripPresenter.createPoint(handlePointNewFormClose);
-      siteMenuComponent.getElement().querySelector(`[data-header-type=${MenuItem.TABLE}]`)
+      siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
       .classList.remove(`trip-tabs__btn--active`);
       break;
     case MenuItem.TABLE:
       // Показать доску
+      tripPresenter.destroy();
+      tripPresenter.init();
       // Скрыть статистику
+      remove(statisticsComponent);
+      siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
+      .classList.add(`trip-tabs__btn--active`);
+      siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.STATS}]`)
+      .classList.remove(`trip-tabs__btn--active`);
       break;
     case MenuItem.STATS:
       // Скрыть доску
       // Показать статистику
+      tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripPresenter.renderTripInfo();
+      statisticsComponent = new StatisticsView(pointsModel.getPoints(), pointsModel.getOffers());
+      render(mainContainer, statisticsComponent, RenderPosition.BEFOREEND);
+
+      siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
+      .classList.remove(`trip-tabs__btn--active`);
+      siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.STATS}]`)
+      .classList.add(`trip-tabs__btn--active`);
       break;
   }
 };
@@ -84,10 +108,10 @@ const filterPresenter = new FilterPresenter(controlsContainer, filterModel, poin
 tripPresenter.init();
 //filterPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+/*document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
   evt.preventDefault();
   tripPresenter.createPoint(handlePointNewFormClose);
-}); 
+});*/ 
 
 Promise
 .all([

@@ -59,7 +59,7 @@ export default class PointNew {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
-  _handleFormSubmit(point) {    
+  _handleFormSubmit(point) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,

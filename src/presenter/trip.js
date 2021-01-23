@@ -22,20 +22,21 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._pointModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._handleModelEvent = this._handleModelEvent.bind(this);    
     this._pointNewPresenter = new PointNewPresenter(tripContainer.querySelector(`.trip-events__list`), this._handleViewAction);
   }
 
   init() {
     this._renderBoard();
+    this._pointModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   createPoint(callback) {
     this._currentSortType = SortType.DEFAULT;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(callback, this._getDestinations(), this._getOffers());
+    // this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    // this._pointNewPresenter.init(callback, this._getDestinations(), this._getOffers());
   }
 
   _getDestinations() {
@@ -73,6 +74,15 @@ export default class Trip {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
+  }
+
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    // remove(this._taskListComponent);
+
+    this._pointModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleSortTypeChange(sortType) {
@@ -126,6 +136,10 @@ export default class Trip {
     }
   }
 
+  renderTripInfo() {
+    this._renderTripInformation();
+  }
+
   _renderSort() {
     if (this._sortComponent !== null) {
       this._sortComponent = null;
@@ -156,7 +170,8 @@ export default class Trip {
     render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderTripInformation(points) {
+  _renderTripInformation() {
+    const points = this._getPoints();
     if (this._tripInformationBlock !== null) {
       this._tripInformationBlock = null;
     }
@@ -184,7 +199,7 @@ export default class Trip {
     this._renderPoints(points, destinations, offers);
 
     if (pointCount !== 0) {
-      this._renderTripInformation(points);
+      this._renderTripInformation();
     }
     // this._renderPointsList();
   }
