@@ -400,7 +400,6 @@ class FormEdit extends SmartView {
   }
 
   static parseDataToPoint(data) {
-    console.log(new Date(data.dateStart))
     return Object.assign({}, data);
   }
 }
