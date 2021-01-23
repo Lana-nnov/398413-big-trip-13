@@ -8,7 +8,7 @@ const getInfoDestination = (points) => {
   const prices = points.map(({price}) => +price);
   const dateFirst = dayjs(points[0].dateStart).format(`MMM DD`);
   // const dateSecond = dayjs(points[THIRD_POINT].dateFinish).format(`MMM DD`);
-  const mySetPlaces = new Set (places);
+  const mySetPlaces = new Set(places);
   const placesArray = Array.from(mySetPlaces);
 
   const MAIN_COUNT_POINTS = 3;
@@ -28,12 +28,12 @@ const getInfoDestination = (points) => {
   const createDateSecond = () => {
     if (placesArray.length >= MAIN_COUNT_POINTS) {
       const pointObject = points.find((elem) => elem.place === placesArray[THIRD_POINT]);
-        return dayjs(pointObject.dateFinish).format(`MMM DD`);
-      } else {
-        const pointObject = points.find((elem) => elem.place === placesArray[placesArray.length - 1]);
-        return dayjs(pointObject.dateFinish).format(`MMM DD`);
+      return dayjs(pointObject.dateFinish).format(`MMM DD`);
+    } else {
+      const pointObject = points.find((elem) => elem.place === placesArray[placesArray.length - 1]);
+      return dayjs(pointObject.dateFinish).format(`MMM DD`);
     }
-  }  
+  };
 
   const createHeaderPriceInfo = () => {
     return prices.reduce(reducer);

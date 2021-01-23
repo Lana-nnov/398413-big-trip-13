@@ -3,8 +3,8 @@ import {FormEdit} from "../view/form-edit.js";
 import {generateId} from "../utils/points.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
-import dayjs from "dayjs";
-import {getCurrentDate} from "../utils/points.js";
+// import dayjs from "dayjs";
+// import {getCurrentDate} from "../utils/points.js";
 
 export default class PointNew {
   constructor(pointListContainer, changeData) {

@@ -22,7 +22,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const types = [];
 
 const getEventEditTemplate = (data, destinations, offersArray) => {
-  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;  
+  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;
 
   const createPlacesList = () => {
     return destinations.map((elem) => {

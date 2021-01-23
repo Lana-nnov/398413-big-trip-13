@@ -3,7 +3,7 @@ import {InfoDestination} from "../view/header-info";
 import Point from './point.js';
 import PointNewPresenter from './new-point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {SortType, UpdateType, UserAction, FilterType} from "../const.js";
+import {SortType, UpdateType, UserAction} from "../const.js";
 import {sortPointTime, sortPointPrice} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
 import LoadingView from "../view/loading.js";
@@ -22,7 +22,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);    
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointNewPresenter = new PointNewPresenter(tripContainer.querySelector(`.trip-events__list`), this._handleViewAction);
   }
 

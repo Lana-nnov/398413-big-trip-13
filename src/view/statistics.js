@@ -4,271 +4,270 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const renderMoneyChart = (moneyCtx, points, typesArray) => {
-    const prices = points.map(({price}) => +price);
-   
+  // const prices = points.map(({price}) => +price);
 
-    const getPriceByType = (points) => {
-        const sum = [];
-        
-        typesArray.forEach((type) => {
-            let result = 0;
-            points.forEach((elem) => {
-                if (elem.type === type) {
-                    result += Number(elem.price);
-                }    
-            }); 
-            sum.push(result);            
-        });
-        return sum; 
-   }
-
-   const priceByType = getPriceByType(points);
+  const getPriceByType = (points) => {
+    const sum = [];
     
-    // Функция для отрисовки графика по цене
-    return new Chart(moneyCtx, {
-        plugins: [ChartDataLabels],
-        type: `horizontalBar`,
-        data: {
-          labels: typesArray,
-          datasets: [{
-            data: priceByType,
-            backgroundColor: `#ffffff`,
-            hoverBackgroundColor: `#ffffff`,
-            anchor: `start`
-          }]
-        },
-        options: {
-          plugins: {
-            datalabels: {
-              font: {
-                size: 13
-              },
-              color: `#000000`,
-              anchor: `end`,
-              align: `start`,
-              formatter: (val) => `€ ${val}`
-            }
-          },
-          title: {
-            display: true,
-            text: `MONEY`,
-            fontColor: `#000000`,
-            fontSize: 23,
-            position: `left`
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: `#000000`,
-                padding: 5,
-                fontSize: 13,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              barThickness: 44,
-            }],
-            xAxes: [{
-              ticks: {
-                display: false,
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              minBarLength: 50
-            }],
-          },
-          legend: {
-            display: false
-          },
-          tooltips: {
-            enabled: false,
-          }
-        }
-      })      
-  };
-  
-const renderTypeChart = (typeCtx, points, typesArray) => {    
-
-    const countPointsByType = (points) => {
-        const pointsCountByType = [];
-        
-        typesArray.forEach((type) => {
-            let result = 0;
-            points.forEach((elem) => {
-                if (elem.type === type) {
-                    result += 1;
-                }    
-            }); 
-            pointsCountByType.push(result);
-        });         
-        return pointsCountByType; 
-    }
-
-    const priceByType = countPointsByType(points);
-
-    return new Chart(typeCtx, {
-        plugins: [ChartDataLabels],
-        type: `horizontalBar`,
-        data: {
-          labels: typesArray,
-          datasets: [{
-            data: priceByType,
-            backgroundColor: `#ffffff`,
-            hoverBackgroundColor: `#ffffff`,
-            anchor: `start`
-          }]
-        },
-        options: {
-          plugins: {
-            datalabels: {
-              font: {
-                size: 13
-              },
-              color: `#000000`,
-              anchor: `end`,
-              align: `start`,
-              formatter: (val) => `${val}x`
-            }
-          },
-          title: {
-            display: true,
-            text: `TYPE`,
-            fontColor: `#000000`,
-            fontSize: 23,
-            position: `left`
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: `#000000`,
-                padding: 5,
-                fontSize: 13,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              barThickness: 44,
-            }],
-            xAxes: [{
-              ticks: {
-                display: false,
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              minBarLength: 50
-            }],
-          },
-          legend: {
-            display: false
-          },
-          tooltips: {
-            enabled: false,
-          }
-        }
+    typesArray.forEach((type) => {
+        let result = 0;
+        points.forEach((elem) => {
+            if (elem.type === type) {
+              result += Number(elem.price);
+            }    
+        }); 
+        sum.push(result);            
     });
+    return sum; 
+  }
+
+  const priceByType = getPriceByType(points);
+    
+  // Функция для отрисовки графика по цене
+  return new Chart(moneyCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: typesArray,
+      datasets: [{
+        data: priceByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `€ ${val}`
+        }
+      },
+      title: {
+        display: true,
+        text: `MONEY`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  })
+};
+  
+const renderTypeChart = (typeCtx, points, typesArray) => {
+
+  const countPointsByType = (points) => {
+  const pointsCountByType = [];
+
+  typesArray.forEach((type) => {
+    let result = 0;
+    points.forEach((elem) => {
+        if (elem.type === type) {
+          result += 1;
+        }
+    }); 
+    pointsCountByType.push(result);
+    });
+    return pointsCountByType; 
+  }
+
+  const priceByType = countPointsByType(points);
+
+  return new Chart(typeCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: typesArray,
+      datasets: [{
+        data: priceByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}x`
+        }
+      },
+      title: {
+        display: true,
+        text: `TYPE`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  });
 };
 
 const renderTimeChart = (timeCtx, points, typesArray) => {
 
-    const getToHours = (ms) => {
-        const days = Math.floor(ms / (24*60*60*1000));
-        const daysms = ms % (24 * 60 * 60 * 1000);
-        const hours = Math.floor((daysms) / (60 * 60 * 1000));
-        const hoursms = ms % (60 * 60 * 1000);
-        return hours;
-    };
+  const getToHours = (ms) => {
+    const days = Math.floor(ms / (24*60*60*1000));
+    const daysms = ms % (24 * 60 * 60 * 1000);
+    const hours = Math.floor((daysms) / (60 * 60 * 1000));
+    const hoursms = ms % (60 * 60 * 1000);
+    return hours;
+  };
 
-    const countPointsByTime = (points) => {
-        const timeByType = [];
-        
-        typesArray.forEach((type) => {
-            let result = 0;
-            points.forEach((elem) => {
-                if (elem.type === type) {
-                  const diff = dayjs(elem.dateFinish).diff(dayjs(elem.dateStart));
-                  result+= getToHours(diff);
-                }    
-            }); 
-            timeByType.push(Math.floor(result/24));
-        });        
-        return timeByType; 
-    }    
-
-    const daysByType = countPointsByTime(points);
-
-    return new Chart(timeCtx, {
-        plugins: [ChartDataLabels],
-        type: `horizontalBar`,
-        data: {
-          labels: typesArray,
-          datasets: [{
-            data: daysByType,
-            backgroundColor: `#ffffff`,
-            hoverBackgroundColor: `#ffffff`,
-            anchor: `start`
-          }]
-        },
-        options: {
-          plugins: {
-            datalabels: {
-              font: {
-                size: 13
-              },
-              color: `#000000`,
-              anchor: `end`,
-              align: `start`,
-              formatter: (val) => `${val}x`
-            }
-          },
-          title: {
-            display: true,
-            text: `TIME`,
-            fontColor: `#000000`,
-            fontSize: 23,
-            position: `left`
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: `#000000`,
-                padding: 5,
-                fontSize: 13,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              barThickness: 44,
-            }],
-            xAxes: [{
-              ticks: {
-                display: false,
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              },
-              minBarLength: 50
-            }],
-          },
-          legend: {
-            display: false
-          },
-          tooltips: {
-            enabled: false,
-          }
+  const countPointsByTime = (points) => {
+    const timeByType = [];
+    
+    typesArray.forEach((type) => {
+      let result = 0;
+      points.forEach((elem) => {
+        if (elem.type === type) {
+          const diff = dayjs(elem.dateFinish).diff(dayjs(elem.dateStart));
+          result+= getToHours(diff);
         }
-      })   
-};    
+      });
+      timeByType.push(Math.floor(result/24));
+    });
+    return timeByType;
+  }
+
+  const daysByType = countPointsByTime(points);
+
+  return new Chart(timeCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: typesArray,
+      datasets: [{
+        data: daysByType,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}x`
+        }
+      },
+      title: {
+        display: true,
+        text: `TIME`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  })
+};
 
 const createStatisticsTemplate = () => {
   // const completedPointCount = 0; // Нужно посчитать количество завершенных задач за период
@@ -313,7 +312,7 @@ export default class Statistics extends SmartView {
 
   restoreHandlers() {
     this._setCharts();
-  }  
+  }
 
   _setCharts() {
     // Нужно отрисовать два графика
