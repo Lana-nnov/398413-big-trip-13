@@ -18,7 +18,7 @@ const renderMoneyChart = (moneyCtx, points, typesArray) => {
       });
       sum.push(result);
     });
-    return sum; 
+    return sum;
   };
 
   const priceByType = getPriceByType(points);
@@ -101,10 +101,10 @@ const renderTypeChart = (typeCtx, points, typesArray) => {
         if (elem.type === type) {
           result += 1;
         }
-      }); 
+      });
       pointsCountByType.push(result);
     });
-    return pointsCountByType; 
+    return pointsCountByType;
   };
 
   const priceByType = countPointsByType(points);
