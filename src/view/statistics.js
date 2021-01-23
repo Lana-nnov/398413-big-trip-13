@@ -6,23 +6,23 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 const renderMoneyChart = (moneyCtx, points, typesArray) => {
   // const prices = points.map(({price}) => +price);
 
-  const getPriceByType = (points) => {
+  const getPriceByType = (pointsArray) => {
     const sum = [];
-    
+
     typesArray.forEach((type) => {
-        let result = 0;
-        points.forEach((elem) => {
-            if (elem.type === type) {
-              result += Number(elem.price);
-            }    
-        }); 
-        sum.push(result);            
+      let result = 0;
+      pointsArray.forEach((elem) => {
+        if (elem.type === type) {
+          result += Number(elem.price);
+        }
+      });
+      sum.push(result);
     });
     return sum; 
-  }
+  };
 
   const priceByType = getPriceByType(points);
-    
+
   // Функция для отрисовки графика по цене
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
@@ -87,25 +87,25 @@ const renderMoneyChart = (moneyCtx, points, typesArray) => {
         enabled: false,
       }
     }
-  })
+  });
 };
-  
+
 const renderTypeChart = (typeCtx, points, typesArray) => {
 
-  const countPointsByType = (points) => {
-  const pointsCountByType = [];
+  const countPointsByType = (pointsArray) => {
+    const pointsCountByType = [];
 
-  typesArray.forEach((type) => {
-    let result = 0;
-    points.forEach((elem) => {
+    typesArray.forEach((type) => {
+      let result = 0;
+      pointsArray.forEach((elem) => {
         if (elem.type === type) {
           result += 1;
         }
-    }); 
-    pointsCountByType.push(result);
+      }); 
+      pointsCountByType.push(result);
     });
     return pointsCountByType; 
-  }
+  };
 
   const priceByType = countPointsByType(points);
 
@@ -178,28 +178,28 @@ const renderTypeChart = (typeCtx, points, typesArray) => {
 const renderTimeChart = (timeCtx, points, typesArray) => {
 
   const getToHours = (ms) => {
-    const days = Math.floor(ms / (24*60*60*1000));
+    // const days = Math.floor(ms / (24*60*60*1000));
     const daysms = ms % (24 * 60 * 60 * 1000);
     const hours = Math.floor((daysms) / (60 * 60 * 1000));
-    const hoursms = ms % (60 * 60 * 1000);
+    // const hoursms = ms % (60 * 60 * 1000);
     return hours;
   };
 
-  const countPointsByTime = (points) => {
+  const countPointsByTime = (pointsArray) => {
     const timeByType = [];
-    
+
     typesArray.forEach((type) => {
       let result = 0;
-      points.forEach((elem) => {
+      pointsArray.forEach((elem) => {
         if (elem.type === type) {
           const diff = dayjs(elem.dateFinish).diff(dayjs(elem.dateStart));
-          result+= getToHours(diff);
+          result += getToHours(diff);
         }
       });
-      timeByType.push(Math.floor(result/24));
+      timeByType.push(Math.floor(result / 24));
     });
     return timeByType;
-  }
+  };
 
   const daysByType = countPointsByTime(points);
 
@@ -266,7 +266,7 @@ const renderTimeChart = (timeCtx, points, typesArray) => {
         enabled: false,
       }
     }
-  })
+  });
 };
 
 const createStatisticsTemplate = () => {
@@ -303,7 +303,7 @@ export default class Statistics extends SmartView {
   }
 
   removeElement() {
-    super.removeElement();    
+    super.removeElement();
   }
 
   getTemplate() {
