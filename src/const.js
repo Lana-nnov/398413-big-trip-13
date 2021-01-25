@@ -42,13 +42,20 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`
+};
+
+export const MenuItem = {
+  ADD_NEW_POINT: `ADD_NEW_POINT`,
+  TABLE: `TABLE`,
+  STATS: `STATS`
 };
 
 export const FHOTOS_COUNT = 5;

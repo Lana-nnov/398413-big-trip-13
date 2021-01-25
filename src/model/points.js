@@ -4,11 +4,34 @@ export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
+    this._destinations = [];
+    this._offers = [];
   }
 
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+    this._notify(updateType);
   }
+
+  // _____________________________________________
+
+  setDestinations(destinations) {
+    this._destinations = destinations.slice();
+  }
+
+  getDestinations() {
+    return this._destinations;
+  }
+
+  setOffers(offers) {
+    this._offers = offers.slice();
+  }
+
+  getOffers() {
+    return this._offers;
+  }
+
+  // ___________________________
 
   getPoints() {
     return this._points;
@@ -52,5 +75,61 @@ export default class Points extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          price: point.base_price,
+          place: point.destination.name,
+          dateStart: point.date_from !== null ? new Date(point.date_from) : point.date_from,
+          dateFinish: point.date_to !== null ? new Date(point.date_to) : point.date_to,
+          description: point.destination.description,
+          photos: point.destination.pictures,
+          isFavorite: point.is_favorite
+        }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.destination.name;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.destination.description;
+    delete adaptedPoint.destination.pictures;
+    delete adaptedPoint.is_favorite;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "base_price": point.price,
+          "date_from": point.dateStart instanceof Date ? point.dateStart.toISOString() : null,
+          "date_to": point.dateFinish instanceof Date ? point.dateFinish.toISOString() : null,
+          'destination': {
+            description: point.description,
+            name: point.place,
+            pictures: point.photos,
+          },
+          "is_favorite": point.isFavorite
+        }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint.price;
+    delete adaptedPoint.dateStart;
+    delete adaptedPoint.dateFinish;
+    delete adaptedPoint.isFavorite;
+    delete adaptedPoint.place;
+    delete adaptedPoint.description;
+    delete adaptedPoint.photos;
+
+    return adaptedPoint;
   }
 }

@@ -1,7 +1,10 @@
 import {FormEdit} from "../view/form-edit.js";
-import {generateId} from "../mock/point.js";
+// import {generateId} from "../mock/point.js";
+import {generateId} from "../utils/points.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
+// import dayjs from "dayjs";
+// import {getCurrentDate} from "../utils/points.js";
 
 export default class PointNew {
   constructor(pointListContainer, changeData) {
@@ -9,18 +12,23 @@ export default class PointNew {
     this._changeData = changeData;
 
     this._pointEditComponent = null;
+    this._destroyCallback = null;
 
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+
   }
 
-  init(point) {
-    this._point = point;
+  init(callback, destinations, offers) {
+    this._point = null;
+    this._destroyCallback = callback;
     if (this._pointEditComponent !== null) {
       return;
     }
-    this._pointEditComponent = new FormEdit();
+    this._destinations = destinations;
+    this._offers = offers;
+    this._pointEditComponent = new FormEdit(this._point, this._destinations, this._offers);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
@@ -32,6 +40,10 @@ export default class PointNew {
   }
 
   destroy() {
+    if (this._destroyCallback !== null) {
+      this._destroyCallback();
+    }
+
     if (this._pointEditComponent === null) {
       return;
     }
