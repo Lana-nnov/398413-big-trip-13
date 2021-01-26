@@ -59,16 +59,34 @@ export default class PointNew {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+    console.log(this._pointEditComponent)
+    this._pointEditComponent.shake(resetFormState);
+  }
+
+
   _handleFormSubmit(point) {
-    console.log(point)
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        point
-        
+        point        
         // Object.assign({id: generateId()}, point)
     );
-    this.destroy();
+    // this.destroy();
   }
 
   _handleDeleteClick() {

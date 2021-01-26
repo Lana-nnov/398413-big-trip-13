@@ -1,6 +1,6 @@
 import {FormSort} from "../view/form-sort.js";
 import {InfoDestination} from "../view/header-info";
-import Point from './point.js';
+import Point, {State as PointPresenterViewState} from './point.js';
 import PointNewPresenter from './new-point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
@@ -99,25 +99,36 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this._pointPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointModel.updatePoint(updateType, response);
+        })
+        .catch(() => {
+          this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         // this._pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        console.log(update)
+        this._pointNewPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._pointModel.addPoint(updateType, response);
+        })
+        .catch(() => {
+          this._pointNewPresenter.setAborting();
         });
         // this._pointModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
+        this._pointPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           // Обратите внимание, метод удаления задачи на сервере
           // ничего не возвращает. Это и верно,
           // ведь что можно вернуть при удалении задачи?
           // Поэтому в модель мы всё также передаем update
           this._pointModel.deletePoint(updateType, update);
+        })
+        .catch(() => {
+          this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         // this._pointModel.deletePoint(updateType, update);
         break;
