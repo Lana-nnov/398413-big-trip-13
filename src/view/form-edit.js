@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 // import {TYPES, PLACES} from "../const.js";
 // import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
-import {getCurrentDate} from "../utils/points.js";
+// import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -21,7 +21,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const types = [];
 
-const getEventEditTemplate = (data, destinations, offersArray) => {  
+const getEventEditTemplate = (data, destinations, offersArray) => {
   const {description, place, price, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
 
   const createPlacesList = () => {
@@ -30,12 +30,12 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
     }).join(``);
   };
 
-  const createOffersList = (isDisabled) => {
+  const createOffersList = (disabled) => {
     return offers.map((elem) => {
       return `<div class="event__available-offers">
       <div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
-        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${isDisabled ? `disabled` : ``}>
+        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}>
         <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
           <span class="event__offer-title">${elem.title}</span>
           &plus;&euro;&nbsp;
@@ -43,7 +43,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
         </label>
       </div>`;
     }).join(``);
-  };    
+  };
 
   const createPhotoList = () => {
     return photos.map((elem) => {
@@ -56,17 +56,17 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
   // const photosList = createPhotoList();
   const isSubmitDisabled = (place === ``);
 
-  const createDateList = (isDisabled) => {
+  const createDateList = (disabled) => {
     return `<div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
     <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFirst}
-    ${isDisabled ? `disabled` : ``}>
+    ${disabled ? `disabled` : ``}>
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">To</label>
     <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateSecond}
-    ${isDisabled ? `disabled` : ``}>
-  </div>`
-  }  
+    ${disabled ? `disabled` : ``}>
+  </div>`;
+  };
 
   const createTypesList = () => {
     return offersArray.map((elem) => {
@@ -74,7 +74,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
     });
   };
 
-  const getEventTypeList = (isDisabled) => {
+  const getEventTypeList = (disabled) => {
     createTypesList();
     const mySetTypes = new Set(types);
     const typesArray = Array.from(mySetTypes);
@@ -84,7 +84,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
         return `<div class="event__type-item">
             <input id="event-type-${typeInLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeInLowerCase}"
             ${type === typeItem ? `checked` : ` `}
-            ${isDisabled ? `disabled` : ``}>
+            ${disabled ? `disabled` : ``}>
             <label class="event__type-label  event__type-label--${typeInLowerCase}" for="event-type-${typeInLowerCase}-1">${typeInLowerCase}
             </label>
             </div>`;
@@ -215,7 +215,7 @@ class FormEdit extends SmartView {
         isSaving: false,
         isDeleting: false
       };
-      console.log(point.dateStart)
+      // console.log(point.dateStart)
     }
 
     this._data = FormEdit.parsePointToData(point);
@@ -410,13 +410,13 @@ class FormEdit extends SmartView {
 
   static parsePointToData(point) {
     return Object.assign(
-      {},
-      point,
-      {
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false
-      }
+        {},
+        point,
+        {
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
+        }
     );
   }
 

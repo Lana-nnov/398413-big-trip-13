@@ -74,7 +74,6 @@ export default class PointNew {
         isDeleting: false
       });
     };
-    console.log(this._pointEditComponent)
     this._pointEditComponent.shake(resetFormState);
   }
 
@@ -83,7 +82,7 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        point        
+        point
         // Object.assign({id: generateId()}, point)
     );
     // this.destroy();

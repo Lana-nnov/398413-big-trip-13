@@ -123,7 +123,7 @@ export default class Point {
       !isDatesEqual(this._point.dateStart, update.dateStart) ||
       !isDatesEqual(this._point.dateFinish, update.dateFinish) ||
       this._point.price !== update.price;
-    
+
     this._changeData(
         UserAction.UPDATE_POINT,
         isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
