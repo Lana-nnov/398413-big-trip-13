@@ -99,7 +99,7 @@ export default class Points extends Observer {
     delete adaptedPoint.date_to;
     delete adaptedPoint.destination.description;
     delete adaptedPoint.destination.pictures;
-    delete adaptedPoint.is_favorite;
+    delete adaptedPoint.is_favorite;    
 
     return adaptedPoint;
   }
@@ -109,7 +109,7 @@ export default class Points extends Observer {
         {},
         point,
         {
-          "base_price": point.price,
+          "base_price": Number(point.price),
           "date_from": point.dateStart instanceof Date ? point.dateStart.toISOString() : null,
           "date_to": point.dateFinish instanceof Date ? point.dateFinish.toISOString() : null,
           'destination': {

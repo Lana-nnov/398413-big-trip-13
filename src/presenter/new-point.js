@@ -1,6 +1,6 @@
 import {FormEdit} from "../view/form-edit.js";
 // import {generateId} from "../mock/point.js";
-import {generateId} from "../utils/points.js";
+// import {generateId} from "../utils/points.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
 // import dayjs from "dayjs";
@@ -60,12 +60,13 @@ export default class PointNew {
   }
 
   _handleFormSubmit(point) {
+    console.log(point)
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        // Пока у нас нет сервера, который бы после сохранения
-        // выдывал честный id задачи, нам нужно позаботиться об этом самим
-        Object.assign({id: generateId()}, point)
+        point
+        
+        // Object.assign({id: generateId()}, point)
     );
     this.destroy();
   }

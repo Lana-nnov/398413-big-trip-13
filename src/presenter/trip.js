@@ -9,7 +9,7 @@ import {filter} from "../utils/filters.js";
 import LoadingView from "../view/loading.js";
 
 export default class Trip {
-  constructor(tripContainer, pointModel, filterModel) {
+  constructor(tripContainer, pointModel, filterModel, api) {
     this._pointModel = pointModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
@@ -18,6 +18,7 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
+    this._api = api;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -98,13 +99,27 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointModel.updatePoint(updateType, response);
+        });
+        // this._pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this._pointModel.addPoint(updateType, update);
+        console.log(update)
+        this._api.addPoint(update).then((response) => {
+          this._pointModel.addPoint(updateType, response);
+        });
+        // this._pointModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
-        this._pointModel.deletePoint(updateType, update);
+        this._api.deletePoint(update).then(() => {
+          // Обратите внимание, метод удаления задачи на сервере
+          // ничего не возвращает. Это и верно,
+          // ведь что можно вернуть при удалении задачи?
+          // Поэтому в модель мы всё также передаем update
+          this._pointModel.deletePoint(updateType, update);
+        });
+        // this._pointModel.deletePoint(updateType, update);
         break;
     }
   }

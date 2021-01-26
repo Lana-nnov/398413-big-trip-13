@@ -21,7 +21,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const types = [];
 
-const getEventEditTemplate = (data, destinations, offersArray) => {
+const getEventEditTemplate = (data, destinations, offersArray) => {  
   const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;
 
   const createPlacesList = () => {
@@ -199,7 +199,7 @@ class FormEdit extends SmartView {
         dateFinish: dayjs(getCurrentDate()).toISOString(),
         description: ``,
         photos: [],
-        type: [`taxi`],
+        type: `taxi`,
         offers: [],
         isFavorite: false
       };
