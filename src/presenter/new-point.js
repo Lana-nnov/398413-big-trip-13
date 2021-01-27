@@ -1,6 +1,6 @@
 import {FormEdit} from "../view/form-edit.js";
 // import {generateId} from "../mock/point.js";
-import {generateId} from "../utils/points.js";
+// import {generateId} from "../utils/points.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
 // import dayjs from "dayjs";
@@ -59,15 +59,33 @@ export default class PointNew {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+    this._pointEditComponent.shake(resetFormState);
+  }
+
+
   _handleFormSubmit(point) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        // Пока у нас нет сервера, который бы после сохранения
-        // выдывал честный id задачи, нам нужно позаботиться об этом самим
-        Object.assign({id: generateId()}, point)
+        point
+        // Object.assign({id: generateId()}, point)
     );
-    this.destroy();
+    // this.destroy();
   }
 
   _handleDeleteClick() {

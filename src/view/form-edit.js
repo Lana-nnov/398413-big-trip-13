@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import SmartView from "./smart.js";
 // import {TYPES, PLACES} from "../const.js";
 // import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
-import {getCurrentDate} from "../utils/points.js";
+// import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -22,7 +22,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const types = [];
 
 const getEventEditTemplate = (data, destinations, offersArray) => {
-  const {description, place, price, type, dateStart, offers, dateFinish, photos} = data;
+  const {description, place, price, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -30,12 +30,12 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
     }).join(``);
   };
 
-  const createOffersList = () => {
+  const createOffersList = (disabled) => {
     return offers.map((elem) => {
       return `<div class="event__available-offers">
       <div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
-        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}">
+        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}>
         <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
           <span class="event__offer-title">${elem.title}</span>
           &plus;&euro;&nbsp;
@@ -56,13 +56,25 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
   // const photosList = createPhotoList();
   const isSubmitDisabled = (place === ``);
 
+  const createDateList = (disabled) => {
+    return `<div class="event__field-group  event__field-group--time">
+    <label class="visually-hidden" for="event-start-time-1">From</label>
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFirst}
+    ${disabled ? `disabled` : ``}>
+    &mdash;
+    <label class="visually-hidden" for="event-end-time-1">To</label>
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateSecond}
+    ${disabled ? `disabled` : ``}>
+  </div>`;
+  };
+
   const createTypesList = () => {
     return offersArray.map((elem) => {
       types.push(elem.type);
     });
   };
 
-  const getEventTypeList = () => {
+  const getEventTypeList = (disabled) => {
     createTypesList();
     const mySetTypes = new Set(types);
     const typesArray = Array.from(mySetTypes);
@@ -71,7 +83,8 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
         const typeInLowerCase = typeItem.toLowerCase();
         return `<div class="event__type-item">
             <input id="event-type-${typeInLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeInLowerCase}"
-            ${type === typeItem ? `checked` : ` `}>
+            ${type === typeItem ? `checked` : ` `}
+            ${disabled ? `disabled` : ``}>
             <label class="event__type-label  event__type-label--${typeInLowerCase}" for="event-type-${typeInLowerCase}-1">${typeInLowerCase}
             </label>
             </div>`;
@@ -120,7 +133,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                       <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">                    
-                    ${getEventTypeList()}
+                    ${getEventTypeList(isDisabled)}
                   </div>
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">                     
@@ -130,29 +143,25 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                       ${createPlacesList()}
                     </datalist>
                   </div>
-                  <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFirst}>
-                    &mdash;
-                    <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateSecond}>
-                  </div>
+                  ${createDateList(isDisabled)}
                   <div class="event__field-group  event__field-group--price">
                     <label class="event__label" for="event-price-1">
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}"
+                    ${isDisabled ? `disabled` : ``}>
                   </div>
-                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}>Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
-                  <button class="event__rollup-btn" type="button">
+                  <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}
+                  ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
+                  <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
+                  <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
-                  ${createOffersList()}
+                  ${createOffersList(isDisabled)}
                   </section>
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -195,14 +204,18 @@ class FormEdit extends SmartView {
       point = {
         price: `0`,
         place: ``,
-        dateStart: dayjs(getCurrentDate()).toISOString(),
-        dateFinish: dayjs(getCurrentDate()).toISOString(),
+        dateStart: new Date(),
+        dateFinish: new Date(),
         description: ``,
         photos: [],
-        type: [`taxi`],
+        type: `taxi`,
         offers: [],
-        isFavorite: false
+        isFavorite: false,
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
       };
+      // console.log(point.dateStart)
     }
 
     this._data = FormEdit.parsePointToData(point);
@@ -396,11 +409,27 @@ class FormEdit extends SmartView {
   }
 
   static parsePointToData(point) {
-    return Object.assign({}, point);
+    return Object.assign(
+        {},
+        point,
+        {
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
+        }
+    );
   }
 
   static parseDataToPoint(data) {
-    return Object.assign({}, data);
+    data = Object.assign({}, data);
+
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
+
+
+    return data;
+    // return Object.assign({}, data);
   }
 }
 

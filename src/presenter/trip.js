@@ -1,15 +1,16 @@
 import {FormSort} from "../view/form-sort.js";
 import {InfoDestination} from "../view/header-info";
-import Point from './point.js';
+import Point, {State as PointPresenterViewState} from './point.js';
 import PointNewPresenter from './new-point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 import {sortPointTime, sortPointPrice} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
+import NoPoints from "../view/no-points.js";
 import LoadingView from "../view/loading.js";
 
 export default class Trip {
-  constructor(tripContainer, pointModel, filterModel) {
+  constructor(tripContainer, pointModel, filterModel, api) {
     this._pointModel = pointModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
@@ -18,6 +19,8 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
+    this._emptyComponent = new NoPoints();
+    this._api = api;
 
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -69,7 +72,7 @@ export default class Trip {
 
     remove(this._sortComponent);
     remove(this._tripInformationBlock);
-    // remove(this._noPointComponent);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    remove(this._emptyComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -98,13 +101,38 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointModel.updatePoint(updateType, update);
+        this._pointPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
+        this._api.updatePoint(update).then((response) => {
+          this._pointModel.updatePoint(updateType, response);
+        })
+        .catch(() => {
+          this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+        });
+        // this._pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this._pointModel.addPoint(updateType, update);
+        this._pointNewPresenter.setSaving();
+        this._api.addPoint(update).then((response) => {
+          this._pointModel.addPoint(updateType, response);
+        }).then(this._pointNewPresenter.destroy())
+        .catch(() => {
+          this._pointNewPresenter.setAborting();
+        });
+        // this._pointModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
-        this._pointModel.deletePoint(updateType, update);
+        this._pointPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
+        this._api.deletePoint(update).then(() => {
+          // Обратите внимание, метод удаления задачи на сервере
+          // ничего не возвращает. Это и верно,
+          // ведь что можно вернуть при удалении задачи?
+          // Поэтому в модель мы всё также передаем update
+          this._pointModel.deletePoint(updateType, update);
+        })
+        .catch(() => {
+          this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+        });
+        // this._pointModel.deletePoint(updateType, update);
         break;
     }
   }
@@ -164,6 +192,7 @@ export default class Trip {
 
   _renderNoPoints() {
     // Метод для рендеринга заглушки
+    render(this._tripContainer.querySelector(`.trip-events__list`), this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderLoading() {

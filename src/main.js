@@ -14,7 +14,7 @@ import Api from "./api.js";
 const pointsModel = new PointsModel();
 
 const AUTHORIZATION = `Basic hjlu678kdfRThjYU`;
-const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const api = new Api(END_POINT, AUTHORIZATION);
 
 // pointsModel.setPoints(points);
@@ -70,12 +70,12 @@ const siteMenuComponent = new MenuTabs();
 render(mainContainer, siteMenuComponent, RenderPosition.AFTERBEGIN);
 const menuContainer = document.querySelector(`.trip-controls`);
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+// siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 const eventsContainer = document.querySelector(`.trip-events`); 
 const controlsContainer = document.querySelector(`.trip-controls`); 
 render(eventsContainer, new List(), RenderPosition.BEFOREEND);
-const tripPresenter = new TripPresenter(mainContainer, pointsModel, filterModel);
+const tripPresenter = new TripPresenter(mainContainer, pointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(controlsContainer, filterModel, pointsModel);
 tripPresenter.init();
 
@@ -94,8 +94,11 @@ Promise
   pointsModel.setDestinations(destinations);
   pointsModel.setOffers(offers);
   pointsModel.setPoints(UpdateType.INIT, points);
-}).catch(() => {
-  pointsModel.setPoints(UpdateType.INIT, []);
-});
+  // render(mainContainer, siteMenuComponent, RenderPosition.AFTERBEGIN);
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+})/*.catch(() => {
+  pointsModel.setPoints(UpdateType.INIT, []);  
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+});*/
 
   
