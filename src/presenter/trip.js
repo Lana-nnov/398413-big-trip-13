@@ -6,6 +6,7 @@ import {render, RenderPosition, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 import {sortPointTime, sortPointPrice} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
+import NoPoints from "../view/no-points.js";
 import LoadingView from "../view/loading.js";
 
 export default class Trip {
@@ -18,6 +19,7 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
+    this._emptyComponent = new NoPoints();
     this._api = api;
 
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -70,7 +72,7 @@ export default class Trip {
 
     remove(this._sortComponent);
     remove(this._tripInformationBlock);
-    // remove(this._noPointComponent);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    remove(this._emptyComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -112,7 +114,7 @@ export default class Trip {
         this._pointNewPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._pointModel.addPoint(updateType, response);
-        })
+        }).then (this._pointNewPresenter.destroy())
         .catch(() => {
           this._pointNewPresenter.setAborting();
         });
@@ -190,6 +192,7 @@ export default class Trip {
 
   _renderNoPoints() {
     // Метод для рендеринга заглушки
+    render(this._tripContainer.querySelector(`.trip-events__list`), this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderLoading() {
