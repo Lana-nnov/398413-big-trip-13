@@ -272,6 +272,7 @@ class FormEdit extends SmartView {
           this.getElement().querySelector(`#event-start-time-1`),
           {
             dateFormat: `d/m/y H:i`,
+            enableTime: true,
             defaultDate: this._data.dateStart,
             onChange: this._dueFirstDateChangeHandler // На событие flatpickr передаём наш колбэк
           }
@@ -285,6 +286,7 @@ class FormEdit extends SmartView {
           this.getElement().querySelector(`#event-end-time-1`),
           {
             dateFormat: `d/m/y H:i`,
+            enableTime: true,
             defaultDate: this._data.dateFinish,
             onChange: this._dueSecondtDateChangeHandler // На событие flatpickr передаём наш колбэк
           }
@@ -298,7 +300,7 @@ class FormEdit extends SmartView {
     // поэтому будем считать срок у всех задач -
     // это 23:59:59 установленной даты
     this.updateData({
-      dateStart: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      dateStart: dayjs(userDate).toDate()
     });
   }
 
@@ -309,7 +311,7 @@ class FormEdit extends SmartView {
     // это 23:59:59 установленной даты
 
     this.updateData({
-      dateFinish: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      dateFinish: dayjs(userDate).toDate()
     });
   }
 
