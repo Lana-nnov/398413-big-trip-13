@@ -114,7 +114,7 @@ export default class Trip {
         this._pointNewPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._pointModel.addPoint(updateType, response);
-        }).then (this._pointNewPresenter.destroy())
+        }).then(this._pointNewPresenter.destroy())
         .catch(() => {
           this._pointNewPresenter.setAborting();
         });
