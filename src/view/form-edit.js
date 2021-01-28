@@ -264,9 +264,9 @@ class FormEdit extends SmartView {
         offers
       });
     } else {
-        offers[objIndex].isChecked = false
-      }
-  };
+      offers[objIndex].isChecked = false;
+    }
+  }
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
