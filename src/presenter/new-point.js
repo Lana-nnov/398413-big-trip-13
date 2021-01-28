@@ -1,10 +1,6 @@
 import {FormEdit} from "../view/form-edit.js";
-// import {generateId} from "../mock/point.js";
-// import {generateId} from "../utils/points.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../const.js";
-// import dayjs from "dayjs";
-// import {getCurrentDate} from "../utils/points.js";
 
 export default class PointNew {
   constructor(pointListContainer, changeData) {
@@ -82,11 +78,9 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        point
-        // Object.assign({id: generateId()}, point)
-    );
-    // this.destroy();
-  }
+        point        
+    );   
+  }  
 
   _handleDeleteClick() {
     this.destroy();

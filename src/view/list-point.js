@@ -15,24 +15,14 @@ const getListPoint = (point) => {
     const hours = Math.floor((daysms) / (60 * 60 * 1000));
     const hoursms = ms % (60 * 60 * 1000);
     const minutes = Math.floor((hoursms) / (60 * 1000));
-    // const minutesms = ms % (60 * 1000);
-    return days + `D ` + hours + `H ` + minutes + `M`;
-  };
-
-  /* const getPrice = (offersPrice) => {
-    const sum = [];
-    for (let i = 0; i < offersPrice.length; i++) {
-      const addSum = +offersPrice[i].price;
-      sum.push(addSum);
+    if(days > 0) {
+      return days + `D ` + hours + `H ` + minutes + `M`;
+    } else if (days == 0 && hours > 0) {
+      return hours + `H ` + minutes + `M`;
+    } else {
+      return minutes + `M`;
     }
-    if (sum.length !== 0) {
-      const totalSum = sum.reduce(function (total, amount) {
-        return total + amount;
-      });
-      return `<span class="event__price-value">${(totalSum)}</span>`;
-    }
-    return `<span></span>`;
-  }; */
+  };  
 
   const getFirstOffer = (offersList) => {
     const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));
