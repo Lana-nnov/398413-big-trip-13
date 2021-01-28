@@ -8,7 +8,7 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
-    this._currentFilter = 99;
+    this._currentFilter = null;
 
     this._filterComponent = null;
 

@@ -293,7 +293,6 @@ class FormEdit extends SmartView {
 
   _rollUpClickHandler(evt) {
     evt.preventDefault();
-    debugger
     this._callback.rollupClick(FormEdit.parseDataToPoint(this._data));
   }
 

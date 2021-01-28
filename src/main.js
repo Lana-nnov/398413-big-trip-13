@@ -10,16 +10,11 @@ import {UpdateType, FilterType} from "./const.js";
 import {MenuItem} from "./const.js";
 import Api from "./api.js";
 
-// const points = new Array(LIST_COUNT).fill().map(generatePoint);
 const pointsModel = new PointsModel();
 
 const AUTHORIZATION = `Basic hjlu678kdfRThjYU`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const api = new Api(END_POINT, AUTHORIZATION);
-
-// pointsModel.setPoints(points);
-
-
 const mainContainer = document.querySelector(`.page-body`);
 
 const handlePointNewFormClose = () => {  
@@ -69,20 +64,12 @@ const filterModel = new FilterModel();
 const siteMenuComponent = new MenuTabs();
 render(mainContainer, siteMenuComponent, RenderPosition.AFTERBEGIN);
 const menuContainer = document.querySelector(`.trip-controls`);
-
-// siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
 const eventsContainer = document.querySelector(`.trip-events`); 
 const controlsContainer = document.querySelector(`.trip-controls`); 
 render(eventsContainer, new List(), RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(mainContainer, pointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(controlsContainer, filterModel, pointsModel);
 tripPresenter.init();
-
-/*document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  tripPresenter.createPoint(handlePointNewFormClose);
-});*/ 
 
 Promise
 .all([
@@ -93,12 +80,11 @@ Promise
 .then(([points, destinations, offers]) => {
   pointsModel.setDestinations(destinations);
   pointsModel.setOffers(offers);
-  pointsModel.setPoints(UpdateType.INIT, points);
-  // render(mainContainer, siteMenuComponent, RenderPosition.AFTERBEGIN);
+  pointsModel.setPoints(UpdateType.INIT, points);  
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-})/*.catch(() => {
+}).catch(() => {
   pointsModel.setPoints(UpdateType.INIT, []);  
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-});*/
+});
 
   

@@ -38,8 +38,6 @@ export default class Trip {
   createPoint(callback) {
     this._currentSortType = SortType.DEFAULT;
     this._pointNewPresenter.init(callback, this._getDestinations(), this._getOffers());
-    // this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    // this._pointNewPresenter.init(callback, this._getDestinations(), this._getOffers());
   }
 
   _getDestinations() {
@@ -108,7 +106,6 @@ export default class Trip {
         .catch(() => {
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
-        // this._pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
         this._pointNewPresenter.setSaving();
@@ -118,21 +115,15 @@ export default class Trip {
         .catch(() => {
           this._pointNewPresenter.setAborting();
         });
-        // this._pointModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
         this._pointPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
-          // Обратите внимание, метод удаления задачи на сервере
-          // ничего не возвращает. Это и верно,
-          // ведь что можно вернуть при удалении задачи?
-          // Поэтому в модель мы всё также передаем update
           this._pointModel.deletePoint(updateType, update);
         })
         .catch(() => {
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
-        // this._pointModel.deletePoint(updateType, update);
         break;
     }
   }
@@ -180,7 +171,6 @@ export default class Trip {
   }
 
   _renderPoint(point, destinations, offers) {
-    // const pointPresenter = new Point(this._listComponent, this._handleViewAction, this._handleModeChange);
     const pointPresenter = new Point(this._tripContainer.querySelector(`.trip-events__list`), this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point, destinations, offers);
     this._pointPresenter[point.id] = pointPresenter;
@@ -191,7 +181,6 @@ export default class Trip {
   }
 
   _renderNoPoints() {
-    // Метод для рендеринга заглушки
     render(this._tripContainer.querySelector(`.trip-events__list`), this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
@@ -230,6 +219,5 @@ export default class Trip {
     if (pointCount !== 0) {
       this._renderTripInformation();
     }
-    // this._renderPointsList();
   }
 }
