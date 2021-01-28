@@ -24,13 +24,11 @@ export default class PointNew {
     }
     this._destinations = destinations;
     this._offers = offers;
-    this._pointEditComponent = new FormEdit(this._point, this._destinations, this._offers);
+    this._pointEditComponent = new FormEdit(this._point, this._destinations, this._offers, true);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     render(this._pointListContainer, this._pointEditComponent, RenderPosition.AFTERBEGIN);
-    this._pointListContainer.querySelector(`.event__reset-btn`).innerHTML = `Cancel`;
-    this._pointListContainer.querySelector(`.event__rollup-btn`).style.display = `none`;
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
   }

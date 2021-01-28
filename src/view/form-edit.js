@@ -5,11 +5,11 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const types = [];
 
-const getEventEditTemplate = (data, destinations, options) => {
+const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
   let {price} = data;
 
-  data.price = Math.trunc(Number(price));
+  data.price = Math.trunc(Number(price));  
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -116,10 +116,12 @@ const getEventEditTemplate = (data, destinations, options) => {
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}
                   ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
-                  <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
+                  ${isNewPoint ? `<button class="event__reset-btn" type="reset" >Cancel</button>` :
+                  `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
+                  ${isNewPoint ? ' ' :
+                  `<button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
                     <span class="visually-hidden">Open event</span>
-                  </button>
+                  </button>`}
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -140,13 +142,14 @@ const getEventEditTemplate = (data, destinations, options) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point, destinations, offers) {
+  constructor(point, destinations, offers, isNewPoint = false) {
     super();
     this._element = null;
     this._datepicker = null;
     this._point = point;
     this._destinations = destinations;
-    this._offers = offers;    
+    this._offers = offers;
+    this._isNewPoint = isNewPoint;    
 
     if (point === null) {
       point = {
@@ -180,7 +183,7 @@ class FormEdit extends SmartView {
   }
 
   getTemplate() {
-    return getEventEditTemplate(this._data, this._destinations, this._offers);
+    return getEventEditTemplate(this._data, this._destinations, this._offers, this._isNewPoint);
   }
 
   _clickHandler(evt) {
@@ -303,7 +306,9 @@ class FormEdit extends SmartView {
 
   setRollUpClickHandler(callback) {
     this._callback.rollupClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+    if(!this._isNewPoint) {
+      this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+    }
   }
 
   _setInnerHandlers() {

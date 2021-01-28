@@ -41,7 +41,7 @@ export default class Point {
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new ListPoint(point);
-    this._pointEditComponent = new FormEdit(point, destinations, offers);
+    this._pointEditComponent = new FormEdit(point, destinations, offers, false);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
