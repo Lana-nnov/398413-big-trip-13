@@ -263,8 +263,10 @@ class FormEdit extends SmartView {
       this.updateData({
         offers
       });
-    } else {offers[objIndex].isChecked = false};
-  }
+    } else {
+        offers[objIndex].isChecked = false
+      }
+  };
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
