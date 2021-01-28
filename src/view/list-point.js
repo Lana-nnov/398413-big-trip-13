@@ -15,14 +15,14 @@ const getListPoint = (point) => {
     const hours = Math.floor((daysms) / (60 * 60 * 1000));
     const hoursms = ms % (60 * 60 * 1000);
     const minutes = Math.floor((hoursms) / (60 * 1000));
-    if(days > 0) {
+    if (days > 0) {
       return days + `D ` + hours + `H ` + minutes + `M`;
-    } else if (days == 0 && hours > 0) {
+    } else if (days === 0 && hours > 0) {
       return hours + `H ` + minutes + `M`;
     } else {
       return minutes + `M`;
     }
-  };  
+  };
 
   const getFirstOffer = (offersList) => {
     const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));

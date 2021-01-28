@@ -4,7 +4,7 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const renderMoneyChart = (moneyCtx, points, typesArray) => {
-  
+
   const getPriceByType = (pointsArray) => {
     const sum = [];
 
@@ -175,9 +175,9 @@ const renderTypeChart = (typeCtx, points, typesArray) => {
 
 const renderTimeChart = (timeCtx, points, typesArray) => {
 
-  const getToHours = (ms) => {    
+  const getToHours = (ms) => {
     const daysms = ms % (24 * 60 * 60 * 1000);
-    const hours = Math.floor((daysms) / (60 * 60 * 1000));    
+    const hours = Math.floor((daysms) / (60 * 60 * 1000));
     return hours;
   };
 
@@ -265,7 +265,7 @@ const renderTimeChart = (timeCtx, points, typesArray) => {
   });
 };
 
-const createStatisticsTemplate = () => {  
+const createStatisticsTemplate = () => {
 
   return `<section class="statistics">
   <h2 class="visually-hidden">Trip statistics</h2>  

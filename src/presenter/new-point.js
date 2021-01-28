@@ -76,9 +76,9 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        point        
-    );   
-  }  
+        point
+    );
+  }
 
   _handleDeleteClick() {
     this.destroy();

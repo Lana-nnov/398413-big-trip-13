@@ -6,7 +6,7 @@ import {reducer} from "../utils/points.js";
 const getInfoDestination = (points) => {
   const places = points.map(({place}) => place);
   const prices = points.map(({price}) => +price);
-  const offers = points.map(({offers}) => offers);
+  const options = points.map(({offers}) => offers);
   const dateFirst = dayjs(points[0].dateStart).format(`MMM DD`);
   const mySetPlaces = new Set(places);
   const placesArray = Array.from(mySetPlaces);
@@ -37,13 +37,12 @@ const getInfoDestination = (points) => {
 
   const createHeaderPriceInfo = () => {
     let offersPrice = 0;
-    offers.forEach((elem) => {
+    options.forEach((elem) => {
       elem.forEach((el) => {
         if (el.isChecked) {
           offersPrice += Number(el.price);
-          }
-        } 
-      )
+        }
+      });
     });
     return prices.reduce(reducer) + offersPrice;
   };

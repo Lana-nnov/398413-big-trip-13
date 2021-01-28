@@ -9,7 +9,7 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
   let {price} = data;
 
-  data.price = Math.trunc(Number(price));  
+  data.price = Math.trunc(Number(price));
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -83,7 +83,7 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
             ${getTypeItem(typesArray)}
           </fieldset>
       </div>`;
-  }; 
+  };
 
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -116,12 +116,8 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}
                   ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-                  ${isNewPoint ? `<button class="event__reset-btn" type="reset" >Cancel</button>` :
-                  `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
-                  ${isNewPoint ? ' ' :
-                  `<button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
-                    <span class="visually-hidden">Open event</span>
-                  </button>`}
+                  ${isNewPoint ? `<button class="event__reset-btn" type="reset" >Cancel</button>` : `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
+                  ${isNewPoint ? ` ` : `<button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}><span class="visually-hidden">Open event</span></button>`}
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -149,7 +145,7 @@ class FormEdit extends SmartView {
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
-    this._isNewPoint = isNewPoint;    
+    this._isNewPoint = isNewPoint;
 
     if (point === null) {
       point = {
@@ -165,7 +161,7 @@ class FormEdit extends SmartView {
         isDisabled: false,
         isSaving: false,
         isDeleting: false
-      };      
+      };
     }
 
     this._data = FormEdit.parsePointToData(point);
@@ -195,7 +191,7 @@ class FormEdit extends SmartView {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
- 
+
   _setDatepicker() {
     if (this._datepicker) {
       this._datepicker.destroy();
@@ -252,7 +248,7 @@ class FormEdit extends SmartView {
   }
 
   _priceChangeHandler(evt) {
-    evt.preventDefault();    
+    evt.preventDefault();
     this.updateData({
       price: evt.target.value
     });
@@ -267,15 +263,15 @@ class FormEdit extends SmartView {
       this.updateData({
         offers
       });
-    } else (offers[objIndex].isChecked = false)
-  }   
+    } else {offers[objIndex].isChecked = false};
+  }
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
     const offerObject = this._offers.slice().find((elem) => elem.type === evt.target.value);
     const offers = offerObject.offers;
     this.updateData({
-      type: evt.target.value,      
+      type: evt.target.value,
       offers
     });
   }
@@ -306,7 +302,7 @@ class FormEdit extends SmartView {
 
   setRollUpClickHandler(callback) {
     this._callback.rollupClick = callback;
-    if(!this._isNewPoint) {
+    if (!this._isNewPoint) {
       this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
     }
   }
@@ -357,7 +353,7 @@ class FormEdit extends SmartView {
     delete data.isDeleting;
 
 
-    return data;    
+    return data;
   }
 }
 
