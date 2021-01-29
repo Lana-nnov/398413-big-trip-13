@@ -4,7 +4,6 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const renderMoneyChart = (moneyCtx, points, typesArray) => {
-  // const prices = points.map(({price}) => +price);
 
   const getPriceByType = (pointsArray) => {
     const sum = [];
@@ -23,7 +22,6 @@ const renderMoneyChart = (moneyCtx, points, typesArray) => {
 
   const priceByType = getPriceByType(points);
 
-  // Функция для отрисовки графика по цене
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
@@ -178,10 +176,8 @@ const renderTypeChart = (typeCtx, points, typesArray) => {
 const renderTimeChart = (timeCtx, points, typesArray) => {
 
   const getToHours = (ms) => {
-    // const days = Math.floor(ms / (24*60*60*1000));
     const daysms = ms % (24 * 60 * 60 * 1000);
     const hours = Math.floor((daysms) / (60 * 60 * 1000));
-    // const hoursms = ms % (60 * 60 * 1000);
     return hours;
   };
 
@@ -270,7 +266,6 @@ const renderTimeChart = (timeCtx, points, typesArray) => {
 };
 
 const createStatisticsTemplate = () => {
-  // const completedPointCount = 0; // Нужно посчитать количество завершенных задач за период
 
   return `<section class="statistics">
   <h2 class="visually-hidden">Trip statistics</h2>  
@@ -315,7 +310,6 @@ export default class Statistics extends SmartView {
   }
 
   _setCharts() {
-    // Нужно отрисовать два графика
     const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
     const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);

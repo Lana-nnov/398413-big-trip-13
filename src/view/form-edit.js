@@ -1,28 +1,15 @@
 import dayjs from "dayjs";
-// import he from "he";
 import SmartView from "./smart.js";
-// import {TYPES, PLACES} from "../const.js";
-// import {TYPES_WITH_OFFERS, generateDescription} from "../mock/point.js";
-// import {getCurrentDate} from "../utils/points.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-/* const BLANK_POINT = {
-  price: `0`,
-  place: ``,
-  dateStart: dayjs(getCurrentDate()).toISOString(),
-  dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
-  description: ``,
-  photos: [],
-  type: [`taxi`],
-  offers: [],
-  isFavorite: false
-}; */
-
 const types = [];
 
-const getEventEditTemplate = (data, destinations, offersArray) => {
-  const {description, place, price, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
+const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
+  const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
+  let {price} = data;
+
+  data.price = Math.trunc(Number(price));
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -35,7 +22,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
       return `<div class="event__available-offers">
       <div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
-        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}>
+        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}${elem.isChecked ? `checked` : ``}>
         <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
           <span class="event__offer-title">${elem.title}</span>
           &plus;&euro;&nbsp;
@@ -53,8 +40,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 
   const dateFirst = dayjs(dateStart).format(`DD/MM/YY-HH:mm`);
   const dateSecond = dayjs(dateFinish).format(`DD/MM/YY-HH:mm`);
-  // const photosList = createPhotoList();
-  const isSubmitDisabled = (place === ``);
+  const isSubmitDisabled = (place === `` || dayjs(dateFinish).diff(dayjs(dateStart)) < 0);
 
   const createDateList = (disabled) => {
     return `<div class="event__field-group  event__field-group--time">
@@ -69,7 +55,7 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
   };
 
   const createTypesList = () => {
-    return offersArray.map((elem) => {
+    return options.map((elem) => {
       types.push(elem.type);
     });
   };
@@ -99,31 +85,6 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
       </div>`;
   };
 
-  /* const getOffersTitle = () => {
-    const createOffersTitle = (offersItems) => {
-      if (offersItems.offers.length > 0) {
-        return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
-      }
-      return `<span></span>`;
-    };
-
-    /* const getOfferItem = (offersBlocks) => {
-      return offersBlocks.map((elem) => {
-        return `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" type="checkbox" name="event-offer-luggage">
-                    <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
-                        <span class="event__offer-title">${elem.title}</span>
-                        &plus;&euro;&nbsp;
-                        <span class="event__offer-price">${elem.price}</span>
-                  </label>
-                </div>`;
-      }).join(``);
-    }; */
-
-  // return `${getOfferTitle(offers)}<div class="event__available-offers">${getOfferItem(Object.values(offers))}</div>`;
-  /* return `<div class="event__available-offers">${createOffersTitle(offers)}</div>`;
-  };*/
-
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -138,7 +99,8 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">                     
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${place}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" 
+                    value="${place}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${createPlacesList()}
                     </datalist>
@@ -149,15 +111,13 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}"
+                    <input class="event__input  event__input--price" id="event-price-1" min="0" type="number" name="event-price" value="${price}"
                     ${isDisabled ? `disabled` : ``}>
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled ? `disabled` : ``}
                   ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-                  <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
-                  <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
-                    <span class="visually-hidden">Open event</span>
-                  </button>
+                  ${isNewPoint ? `<button class="event__reset-btn" type="reset" >Cancel</button>` : `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
+                  ${isNewPoint ? ` ` : `<button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}><span class="visually-hidden">Open event</span></button>`}
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -178,27 +138,14 @@ const getEventEditTemplate = (data, destinations, offersArray) => {
 };
 
 class FormEdit extends SmartView {
-  constructor(point, destinations, offers) {
+  constructor(point, destinations, offers, isNewPoint = false) {
     super();
     this._element = null;
     this._datepicker = null;
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
-
-    /* if (point === false) {
-      point = {
-        price: `0`,
-        place: ``,
-        dateStart: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
-        dateFinish: dayjs(getCurrentDate()).format(`DD/MM/YY-HH:mm`),
-        description: ``,
-        photos: [],
-        type: [`taxi`],
-        offers: [],
-        isFavorite: false
-      };
-    }*/
+    this._isNewPoint = isNewPoint;
 
     if (point === null) {
       point = {
@@ -215,7 +162,6 @@ class FormEdit extends SmartView {
         isSaving: false,
         isDeleting: false
       };
-      // console.log(point.dateStart)
     }
 
     this._data = FormEdit.parsePointToData(point);
@@ -233,7 +179,7 @@ class FormEdit extends SmartView {
   }
 
   getTemplate() {
-    return getEventEditTemplate(this._data, this._destinations, this._offers);
+    return getEventEditTemplate(this._data, this._destinations, this._offers, this._isNewPoint);
   }
 
   _clickHandler(evt) {
@@ -246,70 +192,46 @@ class FormEdit extends SmartView {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
-  /*
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector(`.card__delete`).addEventListener(`click`, this._formDeleteClickHandler);
-  }
-
-  setRollUpClickHandler(callback) {
-    this._callback.rollupClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
-  }*/
-
   _setDatepicker() {
     if (this._datepicker) {
-      // В случае обновления компонента удаляем вспомогательные DOM-элементы,
-      // которые создает flatpickr при инициализации
       this._datepicker.destroy();
       this._datepicker = null;
     }
 
     if (this._data.dateStart) {
-      // flatpickr есть смысл инициализировать только в случае,
-      // если поле выбора даты доступно для заполнения
       this._datepicker = flatpickr(
           this.getElement().querySelector(`#event-start-time-1`),
           {
             dateFormat: `d/m/y H:i`,
+            enableTime: true,
             defaultDate: this._data.dateStart,
-            onChange: this._dueFirstDateChangeHandler // На событие flatpickr передаём наш колбэк
+            onChange: this._dueFirstDateChangeHandler
           }
       );
     }
 
     if (this._data.dateFinish) {
-      // flatpickr есть смысл инициализировать только в случае,
-      // если поле выбора даты доступно для заполнения
       this._datepicker = flatpickr(
           this.getElement().querySelector(`#event-end-time-1`),
           {
             dateFormat: `d/m/y H:i`,
+            enableTime: true,
             defaultDate: this._data.dateFinish,
-            onChange: this._dueSecondtDateChangeHandler // На событие flatpickr передаём наш колбэк
+            onChange: this._dueSecondtDateChangeHandler
           }
       );
     }
   }
 
   _dueFirstDateChangeHandler([userDate]) {
-    // По заданию дедлайн у задачи устанавливается без учёта времеми,
-    // но объект даты без времени завести нельзя,
-    // поэтому будем считать срок у всех задач -
-    // это 23:59:59 установленной даты
     this.updateData({
-      dateStart: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      dateStart: dayjs(userDate).toDate()
     });
   }
 
   _dueSecondtDateChangeHandler([userDate]) {
-    // По заданию дедлайн у задачи устанавливается без учёта времеми,
-    // но объект даты без времени завести нельзя,
-    // поэтому будем считать срок у всех задач -
-    // это 23:59:59 установленной даты
-
     this.updateData({
-      dateFinish: dayjs(userDate).hour(23).minute(59).second(59).toDate()
+      dateFinish: dayjs(userDate).toDate()
     });
   }
 
@@ -336,10 +258,14 @@ class FormEdit extends SmartView {
     const target = evt.target.id.slice(12).replace(/\W/g, ` `);
     const offers = this._data.offers.slice();
     const objIndex = offers.findIndex((obj) => obj.title === target);
-    offers[objIndex].isChecked = true;
-    this.updateData({
-      offers
-    });
+    if (!offers[objIndex].isChecked) {
+      offers[objIndex].isChecked = true;
+      this.updateData({
+        offers
+      });
+    } else {
+      offers[objIndex].isChecked = false;
+    }
   }
 
   _typeChangeHandler(evt) {
@@ -348,7 +274,6 @@ class FormEdit extends SmartView {
     const offers = offerObject.offers;
     this.updateData({
       type: evt.target.value,
-      // offers: TYPES_WITH_OFFERS[evt.target.value[0].toUpperCase() + evt.target.value.slice(1)].offers
       offers
     });
   }
@@ -379,7 +304,9 @@ class FormEdit extends SmartView {
 
   setRollUpClickHandler(callback) {
     this._callback.rollupClick = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+    if (!this._isNewPoint) {
+      this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._rollUpClickHandler);
+    }
   }
 
   _setInnerHandlers() {
@@ -429,7 +356,6 @@ class FormEdit extends SmartView {
 
 
     return data;
-    // return Object.assign({}, data);
   }
 }
 

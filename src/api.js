@@ -75,8 +75,8 @@ export default class Api {
         `${this._endPoint}/${url}`,
         {method, body, headers}
     )
-      // .then(Api.checkStatus)
-      // .catch(Api.catchError);
+      .then(Api.checkStatus)
+      .catch(Api.catchError);
   }
 
   static checkStatus(response) {
