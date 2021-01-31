@@ -22,25 +22,28 @@ const getListPoint = (point) => {
     } else {
       return minutes + `M`;
     }
+  };  
+
+  const getOffers = (options) => {
+      return options.map((option) => {
+        if (option.isChecked) {
+        return `<li class="event__offer">
+          <span class="event__offer-title">${option.title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${option.price}</span>
+        </li>`}
+      }).join(``);
+    
   };
 
-  const getFirstOffer = (offersList) => {
-    const objIndex = offersList.findIndex(((obj) => obj.isChecked === true));
-    if (offersList.length !== 0 && objIndex >= 0) {
-      return `<span class="event__offer-title">${offers[objIndex][`title`]}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offers[objIndex][`price`]}</span>`;
-    }
-    return `<span>No offers</span>`;
-  };
-
+  // ${type[0].toUpperCase() + type.slice(1)}
   return `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">${dateDay}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
                 </div>
-                <h3 class="event__title">${place}</h3>
+                <h3 class="event__title">${type} ${place}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
                     <time class="event__start-time">${dateFirst}</time>
@@ -55,7 +58,7 @@ const getListPoint = (point) => {
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
                   <li class="event__offer">
-                    ${getFirstOffer(offers)}
+                    ${getOffers(offers)}
                   </li>
                 </ul>
                 <button class="event__favorite-btn ${favoriteClassName}" type="button">
