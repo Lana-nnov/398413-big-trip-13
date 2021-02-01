@@ -18,26 +18,26 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   };
 
   const createOffersTitle = () => {
-    if(offers.length > 0) {
-      return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`
-    } else{
+    if (offers.length > 0) {
+      return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
+    } else {
       return `<span></span>`;
     }
-  }  
+  };
 
   const createOffersList = (disabled) => {
-      return offers.map((elem) => {
-        return `<div class="event__available-offers">
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
-          type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}${elem.isChecked ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
-            <span class="event__offer-title">${elem.title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${elem.price}</span>
-          </label>
-        </div>`;
-      }).join(``);    
+    return offers.map((elem) => {
+      return `<div class="event__available-offers">
+      <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
+        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}${elem.isChecked ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
+          <span class="event__offer-title">${elem.title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${elem.price}</span>
+        </label>
+      </div>`;
+    }).join(``);
   };
 
   const createPhotoList = () => {
@@ -157,7 +157,7 @@ class FormEdit extends SmartView {
     this._isNewPoint = isNewPoint;
 
     if (point === null) {
-      const offerObject = this._offers.slice().find((elem) => elem.type === `taxi`);      
+      const offerObject = this._offers.slice().find((elem) => elem.type === `taxi`);
       point = {
         price: `0`,
         place: ``,
@@ -213,7 +213,7 @@ class FormEdit extends SmartView {
           this.getElement().querySelector(`#event-start-time-1`),
           {
             dateFormat: `d/m/y H:i`,
-            enableTime: true,            
+            enableTime: true,
             defaultDate: this._data.dateStart,
             onChange: this._dueFirstDateChangeHandler
           }
@@ -247,12 +247,12 @@ class FormEdit extends SmartView {
   }
 
   _destinationChangeHandler(evt) {
-    evt.preventDefault(); 
+    evt.preventDefault();
     const places = this._destinations.map(({name}) => name);
     let errorMessage;
-    if (!places.includes(evt.target.value)) {     
-      errorMessage = `Попробуйте выбрать из предложенного списка`;      
-    } else {      
+    if (!places.includes(evt.target.value)) {
+      errorMessage = `Попробуйте выбрать из предложенного списка`;
+    } else {
       const cityObject = this._destinations.find((elem) => elem.name === evt.target.value);
       if (cityObject) {
         this.updateData({
@@ -264,19 +264,18 @@ class FormEdit extends SmartView {
     }
 
     if (errorMessage) {
-      evt.target.setCustomValidity(errorMessage);      
-    } else {      
-      evt.target.setCustomValidity('');
+      evt.target.setCustomValidity(errorMessage);
+    } else {
+      evt.target.setCustomValidity(``);
     }
 
-    evt.target.reportValidity();       
+    evt.target.reportValidity();
   }
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
     let errorMessage;
-    console.log(Number.isInteger(Number(evt.target.value)));
-    if(!Number.isInteger(Number(evt.target.value))) {
+    if (!Number.isInteger(Number(evt.target.value))) {
       errorMessage = `Введите целое число`;
     } else {
       this.updateData({
@@ -285,12 +284,12 @@ class FormEdit extends SmartView {
     }
 
     if (errorMessage) {
-      evt.target.setCustomValidity(errorMessage);      
-    } else {      
-      evt.target.setCustomValidity('');
+      evt.target.setCustomValidity(errorMessage);
+    } else {
+      evt.target.setCustomValidity(``);
     }
 
-    evt.target.reportValidity(); 
+    evt.target.reportValidity();
   }
 
   _offerCheckedHandler(evt) {

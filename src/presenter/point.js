@@ -82,13 +82,13 @@ export default class Point {
   _replaceCardToForm() {
     replace(this._pointEditComponent, this._pointComponent);
     this._changeMode();
-    this._mode = Mode.EDITING;    
+    this._mode = Mode.EDITING;
     document.addEventListener(`keydown`, this._handleEscKeyDown);
   }
 
   _replaceFormToCard() {
     replace(this._pointComponent, this._pointEditComponent);
-    this._mode = Mode.DEFAULT;    
+    this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._handleEscKeyDown);
   }
 

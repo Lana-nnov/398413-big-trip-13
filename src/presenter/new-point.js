@@ -58,7 +58,7 @@ export default class PointNew {
     this._pointEditComponent.updateData({
       isDisabled: true,
       isSaving: true
-    });    
+    });
   }
 
   setAborting() {
@@ -69,7 +69,7 @@ export default class PointNew {
         isDeleting: false
       });
     };
-    this._pointEditComponent.shake(resetFormState);     
+    this._pointEditComponent.shake(resetFormState);
   }
 
 

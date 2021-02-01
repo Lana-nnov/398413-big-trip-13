@@ -58,7 +58,7 @@ export default class Trip {
       case SortType.BY_PRICE:
         return filtredPoints.slice().sort(sortPointPrice);
       case SortType.DEFAULT:
-        return filtredPoints.sort(sortPointDate);  
+        return filtredPoints.sort(sortPointDate);
     }
 
     return filtredPoints;
@@ -201,7 +201,7 @@ export default class Trip {
     if (this._isLoading) {
       this._renderLoading();
       return;
-    }    
+    }
 
     const points = this._getPoints();
     const destinations = this._getDestinations();
