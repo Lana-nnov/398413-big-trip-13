@@ -27,11 +27,12 @@ const getListPoint = (point) => {
   const getOffers = (options) => {
     return options.map((option) => {
       if (option.isChecked) {
-      return `<li class="event__offer">
+        return `<li class="event__offer">
         <span class="event__offer-title">${option.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${option.price}</span>
-      </li>`}
+        </li>`;
+      }
     }).join(``);
   };
 
