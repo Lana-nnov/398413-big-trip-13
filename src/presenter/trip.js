@@ -14,7 +14,7 @@ export default class Trip {
     this._pointModel = pointModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
-    this._sortComponent = new FormSort();
+    this._sortComponent = null;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
@@ -103,6 +103,7 @@ export default class Trip {
           this._pointModel.updatePoint(updateType, response);
         })
         .catch(() => {
+          this._pointPresenter[update.id].
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         break;
@@ -184,7 +185,7 @@ export default class Trip {
   }
 
   _renderLoading() {
-    render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
+    render(this._tripContainer.querySelector(`.page-main`), this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTripInformation() {
@@ -200,7 +201,7 @@ export default class Trip {
     if (this._isLoading) {
       this._renderLoading();
       return;
-    }
+    }    
 
     const points = this._getPoints();
     const destinations = this._getDestinations();

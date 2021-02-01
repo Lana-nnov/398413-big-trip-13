@@ -9,7 +9,7 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
   let {price} = data;
 
-  data.price = Math.trunc(Number(price));
+  // data.price = Math.trunc(Number(price));
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -17,19 +17,27 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
     }).join(``);
   };
 
+  const createOffersTitle = () => {
+    if(offers.length > 0) {
+      return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`
+    } else{
+      return `<span></span>`;
+    }
+  }  
+
   const createOffersList = (disabled) => {
-    return offers.map((elem) => {
-      return `<div class="event__available-offers">
-      <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
-        type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}${elem.isChecked ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
-          <span class="event__offer-title">${elem.title}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${elem.price}</span>
-        </label>
-      </div>`;
-    }).join(``);
+      return offers.map((elem) => {
+        return `<div class="event__available-offers">
+        <div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${elem.title.replace(/ /g, `-`)}" 
+          type="checkbox" name="event-offer-${elem.title.replace(/ /g, `-`)}" ${disabled ? `disabled` : ``}${elem.isChecked ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-${elem.title.replace(/ /g, `-`)}">
+            <span class="event__offer-title">${elem.title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${elem.price}</span>
+          </label>
+        </div>`;
+      }).join(``);    
   };
 
   const createPhotoList = () => {
@@ -121,6 +129,7 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
+                  ${createOffersTitle()}
                   ${createOffersList(isDisabled)}
                   </section>
                   <section class="event__section  event__section--destination ${isSubmitDisabled ? `visually-hidden` : ``}" >
@@ -204,7 +213,7 @@ class FormEdit extends SmartView {
           this.getElement().querySelector(`#event-start-time-1`),
           {
             dateFormat: `d/m/y H:i`,
-            enableTime: true,
+            enableTime: true,            
             defaultDate: this._data.dateStart,
             onChange: this._dueFirstDateChangeHandler
           }
@@ -217,6 +226,7 @@ class FormEdit extends SmartView {
           {
             dateFormat: `d/m/y H:i`,
             enableTime: true,
+            minDate: this._data.dateStart,
             defaultDate: this._data.dateFinish,
             onChange: this._dueSecondtDateChangeHandler
           }
@@ -264,9 +274,23 @@ class FormEdit extends SmartView {
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      price: evt.target.value
-    });
+    let errorMessage;
+    console.log(Number.isInteger(Number(evt.target.value)));
+    if(!Number.isInteger(Number(evt.target.value))) {
+      errorMessage = `Введите целое число`;
+    } else {
+      this.updateData({
+        price: evt.target.value
+      });
+    }
+
+    if (errorMessage) {
+      evt.target.setCustomValidity(errorMessage);      
+    } else {      
+      evt.target.setCustomValidity('');
+    }
+
+    evt.target.reportValidity(); 
   }
 
   _offerCheckedHandler(evt) {

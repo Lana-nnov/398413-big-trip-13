@@ -175,6 +175,7 @@ export default class Point {
         });
         break;
       case State.ABORTING:
+        this._changeMode();
         this._pointComponent.shake(resetFormState);
         this._pointEditComponent.shake(resetFormState);
         break;

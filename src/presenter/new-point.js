@@ -51,13 +51,14 @@ export default class PointNew {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
+    // this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `disabled`);
   }
 
   setSaving() {
     this._pointEditComponent.updateData({
       isDisabled: true,
       isSaving: true
-    });
+    });    
   }
 
   setAborting() {
@@ -68,7 +69,7 @@ export default class PointNew {
         isDeleting: false
       });
     };
-    this._pointEditComponent.shake(resetFormState);
+    this._pointEditComponent.shake(resetFormState);     
   }
 
 
