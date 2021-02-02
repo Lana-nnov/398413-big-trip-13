@@ -21,7 +21,12 @@ const handlePointNewFormClose = () => {
   siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
   .classList.add(`trip-tabs__btn--active`);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
+  addNewEventButton.disabled = false;
 };
+
+const addNewEventClickHandler = () => {
+  addNewEventButton.disabled = true;
+}  
 
 let statisticsComponent = null;
 
@@ -34,7 +39,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       tripPresenter.createPoint(handlePointNewFormClose);
       siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
-      .classList.remove(`trip-tabs__btn--active`);
+      .classList.remove(`trip-tabs__btn--active`);      
       break;
     case MenuItem.TABLE:
       tripPresenter.destroy();
@@ -71,6 +76,10 @@ const tripPresenter = new TripPresenter(mainContainer, pointsModel, filterModel,
 const filterPresenter = new FilterPresenter(controlsContainer, filterModel, pointsModel);
 tripPresenter.init();
 
+const addNewEventButton = document.querySelector(`.trip-main__event-add-btn`);
+addNewEventButton.addEventListener(`click`, addNewEventClickHandler);
+addNewEventButton.disabled = true;
+
 Promise
 .all([
   api.getPoints(),
@@ -80,10 +89,12 @@ Promise
 .then(([points, destinations, offers]) => {
   pointsModel.setDestinations(destinations);
   pointsModel.setOffers(offers);
-  pointsModel.setPoints(UpdateType.INIT, points);  
+  pointsModel.setPoints(UpdateType.INIT, points);
+  addNewEventButton.disabled = false;  
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 }).catch(() => {
-  pointsModel.setPoints(UpdateType.INIT, []);  
+  pointsModel.setPoints(UpdateType.INIT, []);
+  addNewEventButton.disabled = false;  
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
 

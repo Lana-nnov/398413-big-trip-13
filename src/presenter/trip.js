@@ -102,8 +102,7 @@ export default class Trip {
         this._api.updatePoint(update).then((response) => {
           this._pointModel.updatePoint(updateType, response);
         })
-        .catch(() => {
-          this._pointPresenter[update.id].
+        .catch(() => {          
           this._pointPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         break;
@@ -127,7 +126,7 @@ export default class Trip {
         break;
     }
   }
-
+  
   _handleModeChange() {
     Object
       .values(this._pointPresenter)

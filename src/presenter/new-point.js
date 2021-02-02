@@ -51,7 +51,6 @@ export default class PointNew {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
-    // this.getElement().querySelector(`.event__save-btn`).setAttribute(`disabled`, `disabled`);
   }
 
   setSaving() {
@@ -78,7 +77,7 @@ export default class PointNew {
         UserAction.ADD_POINT,
         UpdateType.MINOR,
         point
-    );
+    );    
   }
 
   _handleDeleteClick() {

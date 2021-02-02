@@ -9,8 +9,6 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
   let {price} = data;
 
-  // data.price = Math.trunc(Number(price));
-
   const createPlacesList = () => {
     return destinations.map((elem) => {
       return `<option value="${elem.name}"></option>`;

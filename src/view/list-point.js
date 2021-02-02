@@ -32,11 +32,12 @@ const getListPoint = (point) => {
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${option.price}</span>
         </li>`;
+      } else {
+        return ``;
       }
     }).join(``);
   };
-
-  // ${type[0].toUpperCase() + type.slice(1)}
+ 
   return `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">${dateDay}</time>
