@@ -35,7 +35,7 @@ class MenuTabs extends AbstractView {
   _menuClickHandler(evt) {
     if (evt.target.dataset.menuItem) {
       evt.preventDefault();
-      this._callback.menuClick(evt.target.dataset.menuItem);      
+      this._callback.menuClick(evt.target.dataset.menuItem);
     }
   }
 

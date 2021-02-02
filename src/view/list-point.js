@@ -37,7 +37,7 @@ const getListPoint = (point) => {
       }
     }).join(``);
   };
- 
+
   return `<li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">${dateDay}</time>

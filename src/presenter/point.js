@@ -54,7 +54,7 @@ export default class Point {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {      
+    if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPointComponent);
     }
 
@@ -122,7 +122,7 @@ export default class Point {
     const isMinorUpdate =
       !isDatesEqual(this._point.dateStart, update.dateStart) ||
       !isDatesEqual(this._point.dateFinish, update.dateFinish) ||
-      this._point.price !== update.price;    
+      this._point.price !== update.price;
 
     this._changeData(
         UserAction.UPDATE_POINT,

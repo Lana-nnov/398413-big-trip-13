@@ -77,7 +77,7 @@ export default class PointNew {
         UserAction.ADD_POINT,
         UpdateType.MINOR,
         point
-    );    
+    );
   }
 
   _handleDeleteClick() {
