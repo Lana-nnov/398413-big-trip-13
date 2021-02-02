@@ -9,12 +9,18 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
   const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
   let {price} = data;
 
-  data.price = Math.trunc(Number(price));
-
   const createPlacesList = () => {
     return destinations.map((elem) => {
       return `<option value="${elem.name}"></option>`;
     }).join(``);
+  };
+
+  const createOffersTitle = () => {
+    if (offers.length > 0) {
+      return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>`;
+    } else {
+      return `<span></span>`;
+    }
   };
 
   const createOffersList = (disabled) => {
@@ -100,7 +106,7 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
                     <label class="event__label  event__type-output" for="event-destination-1">                     
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" 
-                    value="${place}" list="destination-list-1">
+                    value="${type[0].toUpperCase() + type.slice(1)} ${place}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${createPlacesList()}
                     </datalist>
@@ -121,9 +127,10 @@ const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
+                  ${createOffersTitle()}
                   ${createOffersList(isDisabled)}
                   </section>
-                  <section class="event__section  event__section--destination">
+                  <section class="event__section  event__section--destination ${isSubmitDisabled ? `visually-hidden` : ``}" >
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${isSubmitDisabled ? `` : description}</p>
                     <div class="event__photos-container">
@@ -148,6 +155,7 @@ class FormEdit extends SmartView {
     this._isNewPoint = isNewPoint;
 
     if (point === null) {
+      const offerObject = this._offers.slice().find((elem) => elem.type === `taxi`);
       point = {
         price: `0`,
         place: ``,
@@ -156,7 +164,7 @@ class FormEdit extends SmartView {
         description: ``,
         photos: [],
         type: `taxi`,
-        offers: [],
+        offers: offerObject.offers,
         isFavorite: false,
         isDisabled: false,
         isSaving: false,
@@ -216,6 +224,7 @@ class FormEdit extends SmartView {
           {
             dateFormat: `d/m/y H:i`,
             enableTime: true,
+            minDate: this._data.dateStart,
             defaultDate: this._data.dateFinish,
             onChange: this._dueSecondtDateChangeHandler
           }
@@ -237,21 +246,48 @@ class FormEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const cityObject = this._destinations.find((elem) => elem.name === evt.target.value);
-    if (cityObject) {
-      this.updateData({
-        place: cityObject.name,
-        description: cityObject.description,
-        photos: cityObject.pictures
-      });
+    const places = this._destinations.map(({name}) => name);
+    let errorMessage;
+    if (!places.includes(evt.target.value)) {
+      errorMessage = `Попробуйте выбрать из предложенного списка`;
+    } else {
+      const cityObject = this._destinations.find((elem) => elem.name === evt.target.value);
+      if (cityObject) {
+        this.updateData({
+          place: cityObject.name,
+          description: cityObject.description,
+          photos: cityObject.pictures
+        });
+      }
     }
+
+    if (errorMessage) {
+      evt.target.setCustomValidity(errorMessage);
+    } else {
+      evt.target.setCustomValidity(``);
+    }
+
+    evt.target.reportValidity();
   }
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData({
-      price: evt.target.value
-    });
+    let errorMessage;
+    if (!Number.isInteger(Number(evt.target.value))) {
+      errorMessage = `Введите целое число`;
+    } else {
+      this.updateData({
+        price: evt.target.value
+      });
+    }
+
+    if (errorMessage) {
+      evt.target.setCustomValidity(errorMessage);
+    } else {
+      evt.target.setCustomValidity(``);
+    }
+
+    evt.target.reportValidity();
   }
 
   _offerCheckedHandler(evt) {
@@ -333,6 +369,10 @@ class FormEdit extends SmartView {
     this.setRollUpClickHandler(this._callback.rollupClick);
     this._setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  reset(point) {
+    this.updateData(point);
   }
 
   static parsePointToData(point) {

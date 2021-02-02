@@ -95,6 +95,7 @@ export default class Point {
   _handleEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._pointEditComponent.reset(this._point);
       this._replaceFormToCard();
     }
   }
@@ -128,7 +129,6 @@ export default class Point {
         isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
         update
     );
-    this._replaceFormToCard();
   }
 
   _handleDeleteClick(point) {
@@ -140,6 +140,7 @@ export default class Point {
   }
 
   _handleCloseFormClick() {
+    this._pointEditComponent.reset(this._point);
     this._replaceFormToCard();
   }
 

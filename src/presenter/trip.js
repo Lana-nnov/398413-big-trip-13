@@ -4,7 +4,7 @@ import Point, {State as PointPresenterViewState} from './point.js';
 import PointNewPresenter from './new-point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
-import {sortPointTime, sortPointPrice} from "../utils/points.js";
+import {sortPointTime, sortPointPrice, sortPointDate} from "../utils/points.js";
 import {filter} from "../utils/filters.js";
 import NoPoints from "../view/no-points.js";
 import LoadingView from "../view/loading.js";
@@ -14,7 +14,7 @@ export default class Trip {
     this._pointModel = pointModel;
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
-    this._sortComponent = new FormSort();
+    this._sortComponent = null;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
@@ -57,6 +57,8 @@ export default class Trip {
         return filtredPoints.slice().sort(sortPointTime);
       case SortType.BY_PRICE:
         return filtredPoints.slice().sort(sortPointPrice);
+      case SortType.DEFAULT:
+        return filtredPoints.sort(sortPointDate);
     }
 
     return filtredPoints;
@@ -79,9 +81,6 @@ export default class Trip {
 
   destroy() {
     this._clearTrip({resetSortType: true});
-
-    // remove(this._taskListComponent);
-
     this._pointModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
   }
@@ -185,7 +184,7 @@ export default class Trip {
   }
 
   _renderLoading() {
-    render(this._tripContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
+    render(this._tripContainer.querySelector(`.page-main`), this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTripInformation() {

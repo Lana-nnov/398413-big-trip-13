@@ -10,6 +10,10 @@ export const sortPointPrice = (priceA, priceB) => {
   return priceB.price - priceA.price;
 };
 
+export const sortPointDate = (dateA, dateB) => {
+  return dayjs(dateA.dateStart) - dayjs(dateB.dateFinish);
+};
+
 export const isDatesEqual = (dateA, dateB) => {
   return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `D`);
 };
