@@ -17,7 +17,7 @@ const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const api = new Api(END_POINT, AUTHORIZATION);
 const mainContainer = document.querySelector(`.page-body`);
 
-const handlePointNewFormClose = () => {  
+const handlePointNewFormClose = () => {
   siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
   .classList.add(`trip-tabs__btn--active`);
   siteMenuComponent.setMenuItem(MenuItem.TABLE);
@@ -26,7 +26,7 @@ const handlePointNewFormClose = () => {
 
 const addNewEventClickHandler = () => {
   addNewEventButton.disabled = true;
-}  
+};
 
 let statisticsComponent = null;
 
@@ -39,7 +39,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       tripPresenter.createPoint(handlePointNewFormClose);
       siteMenuComponent.getElement().querySelector(`[data-menu-item=${MenuItem.TABLE}]`)
-      .classList.remove(`trip-tabs__btn--active`);      
+      .classList.remove(`trip-tabs__btn--active`);
       break;
     case MenuItem.TABLE:
       tripPresenter.destroy();
@@ -68,9 +68,8 @@ const handleSiteMenuClick = (menuItem) => {
 const filterModel = new FilterModel();
 const siteMenuComponent = new MenuTabs();
 render(mainContainer, siteMenuComponent, RenderPosition.AFTERBEGIN);
-const menuContainer = document.querySelector(`.trip-controls`);
-const eventsContainer = document.querySelector(`.trip-events`); 
-const controlsContainer = document.querySelector(`.trip-controls`); 
+const eventsContainer = document.querySelector(`.trip-events`);
+const controlsContainer = document.querySelector(`.trip-controls`);
 render(eventsContainer, new List(), RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(mainContainer, pointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(controlsContainer, filterModel, pointsModel);
@@ -90,12 +89,13 @@ Promise
   pointsModel.setDestinations(destinations);
   pointsModel.setOffers(offers);
   pointsModel.setPoints(UpdateType.INIT, points);
-  addNewEventButton.disabled = false;  
+  addNewEventButton.disabled = false;
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  filterPresenter.init();
 }).catch(() => {
   pointsModel.setPoints(UpdateType.INIT, []);
-  addNewEventButton.disabled = false;  
+  addNewEventButton.disabled = false;
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
 
-  
+
