@@ -1,6 +1,6 @@
 export const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
-export const SortType = {  
+export const SortType = {
   DEFAULT: `default`,
   BY_TIME: `time-down`,
   BY_PRICE: `price-down`
