@@ -18,7 +18,7 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  getPoints() {       
+  getPoints() {
     return this._load({url: `points`})
       .then(Api.toJSON)
       .then((points) => points.map(PointsModel.adaptToClient));
@@ -26,15 +26,15 @@ export default class Api {
 
   getDestinations() {
     return this._load({url: `destinations`})
-      .then(Api.toJSON); 
+      .then(Api.toJSON);
   }
 
   getOffers() {
     return this._load({url: `offers`})
-      .then(Api.toJSON); 
+      .then(Api.toJSON);
   }
 
-  updatePoint(point) {    
+  updatePoint(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
@@ -71,7 +71,7 @@ export default class Api {
   }) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(         
+    return fetch(
         `${this._endPoint}/${url}`,
         {method, body, headers}
     )
@@ -90,7 +90,7 @@ export default class Api {
     return response;
   }
 
-  static toJSON(response) {    
+  static toJSON(response) {
     return response.json();
   }
 
@@ -98,3 +98,5 @@ export default class Api {
     throw err;
   }
 }
+
+

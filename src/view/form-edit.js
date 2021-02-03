@@ -6,8 +6,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const types = [];
 
 const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
-  const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting} = data;
-  let {price} = data;
+  const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting, price} = data;
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -356,7 +355,7 @@ class FormEdit extends SmartView {
       .querySelector(`.event__input--price`)
       .addEventListener(`change`, this._priceChangeHandler);
     if (this.getElement().querySelector(`.event__offer-checkbox`)) {
-      let array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
+      const array = Array.from(this.getElement().querySelectorAll(`.event__offer-checkbox`));
       array.forEach((element) => {
         element.addEventListener(`click`, this._offerCheckedHandler);
       });
