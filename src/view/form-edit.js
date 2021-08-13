@@ -6,7 +6,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 const types = [];
 
 const getEventEditTemplate = (data, destinations, options, isNewPoint) => {
-  const {description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting, price} = data;
+  const { description, place, type, dateStart, offers, dateFinish, photos, isDisabled, isSaving, isDeleting, price } = data;
 
   const createPlacesList = () => {
     return destinations.map((elem) => {
@@ -154,7 +154,11 @@ class FormEdit extends SmartView {
     this._isNewPoint = isNewPoint;
 
     if (point === null) {
-      const offerObject = this._offers.slice().find((elem) => elem.type === `taxi`);
+      const options = [];
+      if (this._offers.length > 0) {
+        const offerObject = this._offers.slice().find((elem) => elem.type === `taxi`);
+        console.log(offerObject.offers);
+      }
       point = {
         price: `0`,
         place: ``,
@@ -163,7 +167,8 @@ class FormEdit extends SmartView {
         description: ``,
         photos: [],
         type: `taxi`,
-        offers: offerObject.offers,
+        // offers: offerObject.offers,
+        offers: options,
         isFavorite: false,
         isDisabled: false,
         isSaving: false,
@@ -207,26 +212,26 @@ class FormEdit extends SmartView {
 
     if (this._data.dateStart) {
       this._datepicker = flatpickr(
-          this.getElement().querySelector(`#event-start-time-1`),
-          {
-            dateFormat: `d/m/y H:i`,
-            enableTime: true,
-            defaultDate: this._data.dateStart,
-            onChange: this._dueFirstDateChangeHandler
-          }
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          defaultDate: this._data.dateStart,
+          onChange: this._dueFirstDateChangeHandler
+        }
       );
     }
 
     if (this._data.dateFinish) {
       this._datepicker = flatpickr(
-          this.getElement().querySelector(`#event-end-time-1`),
-          {
-            dateFormat: `d/m/y H:i`,
-            enableTime: true,
-            minDate: this._data.dateStart,
-            defaultDate: this._data.dateFinish,
-            onChange: this._dueSecondtDateChangeHandler
-          }
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          minDate: this._data.dateStart,
+          defaultDate: this._data.dateFinish,
+          onChange: this._dueSecondtDateChangeHandler
+        }
       );
     }
   }
@@ -245,7 +250,7 @@ class FormEdit extends SmartView {
 
   _destinationChangeHandler(evt) {
     evt.preventDefault();
-    const places = this._destinations.map(({name}) => name);
+    const places = this._destinations.map(({ name }) => name);
     let errorMessage;
     if (!places.includes(evt.target.value)) {
       errorMessage = `Попробуйте выбрать из предложенного списка`;
@@ -376,13 +381,13 @@ class FormEdit extends SmartView {
 
   static parsePointToData(point) {
     return Object.assign(
-        {},
-        point,
-        {
-          isDisabled: false,
-          isSaving: false,
-          isDeleting: false
-        }
+      {},
+      point,
+      {
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      }
     );
   }
 
@@ -398,4 +403,4 @@ class FormEdit extends SmartView {
   }
 }
 
-export {FormEdit};
+export { FormEdit };

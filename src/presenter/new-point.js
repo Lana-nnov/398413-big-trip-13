@@ -53,7 +53,7 @@ export default class PointNew {
     this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._clickHandler);
   }
 
-  setSaving() {
+  setSaving() {    
     this._pointEditComponent.updateData({
       isDisabled: true,
       isSaving: true
@@ -68,6 +68,7 @@ export default class PointNew {
         isDeleting: false
       });
     };
+
     this._pointEditComponent.shake(resetFormState);
   }
 

@@ -15,6 +15,7 @@ export default class Trip {
     this._filterModel = filterModel;
     this._tripContainer = tripContainer;
     this._sortComponent = null;
+    this._tripInformationBlock = null;
     this._pointPresenter = {};
     this._currentSortType = SortType.DEFAULT;
     this._isLoading = true;
@@ -65,6 +66,7 @@ export default class Trip {
   }
 
   _clearTrip({resetSortType = false} = {}) {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
@@ -110,7 +112,7 @@ export default class Trip {
         this._pointNewPresenter.setSaving();
         this._api.addPoint(update).then((response) => {
           this._pointModel.addPoint(updateType, response);
-        }).then(this._pointNewPresenter.destroy())
+        })
         .catch(() => {
           this._pointNewPresenter.setAborting();
         });
@@ -128,6 +130,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetView());
